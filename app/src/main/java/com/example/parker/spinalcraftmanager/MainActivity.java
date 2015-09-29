@@ -1,5 +1,7 @@
 package com.example.parker.spinalcraftmanager;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +20,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        Uri data = getIntent().getData();
+        if(data != null){
+            String path = data.getQueryParameter("key");
+            System.out.println(path);
+        }
+        String url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+
+        if(url != null)
+            System.out.println(url);
+
         output = (TextView)findViewById(R.id.textView);
         output.setText("TEST");
         (new Thread(new Connector())).start();
@@ -43,15 +57,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void createConnection() throws IOException {
-        Socket socket = new Socket(InetAddress.getByName("192.168.0.14"), 9494);
-        if(socket.isConnected()){
-            output.setText("connected");
-        }
-        else{
-            output.setText("not connected");
-        }
     }
 }
