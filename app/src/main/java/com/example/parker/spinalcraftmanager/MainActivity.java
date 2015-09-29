@@ -4,13 +4,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
+    TextView output;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        output = (TextView)findViewById(R.id.textView);
+        output.setText("TEST");
+        (new Thread(new Connector())).start();
     }
 
     @Override
@@ -33,5 +43,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createConnection() throws IOException {
+        Socket socket = new Socket(InetAddress.getByName("192.168.0.14"), 9494);
+        if(socket.isConnected()){
+            output.setText("connected");
+        }
+        else{
+            output.setText("not connected");
+        }
     }
 }
