@@ -1,4 +1,4 @@
-package com.example.parker.spinalcraftmanager;
+package com.spinalcraft.manager.client;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,11 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 public class MainActivity extends AppCompatActivity {
     TextView output;
 
@@ -20,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         Uri data = getIntent().getData();
         if(data != null){
@@ -35,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         output = (TextView)findViewById(R.id.textView);
         output.setText("TEST");
         (new Thread(new Connector())).start();
+        new Authenticator();
     }
 
     @Override
