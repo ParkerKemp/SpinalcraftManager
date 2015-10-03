@@ -24,6 +24,7 @@ public class Authenticator {
         this.activity = activity;
         crypt = new Crypt();
         verifyKeysExist();
+//        generateKeys();
     }
 
     public String getPublicKey(){
@@ -35,11 +36,11 @@ public class Authenticator {
     }
 
     private String getKey(String filename){
-        byte[] buffer = new byte[100];
+        byte[] buffer = new byte[1024];
         try {
             FileInputStream inputStream = activity.openFileInput(filename);
-            inputStream.read(buffer, 0, 100);
-            return new String(buffer);
+            inputStream.read(buffer, 0, 1024);
+            return new String(buffer, "UTF-8");
         } catch (FileNotFoundException e) {
             generateKeys();
             return getKey(filename);
@@ -65,11 +66,11 @@ public class Authenticator {
             PrivateKey privateKey = keyPair.getPrivate();
             PublicKey publicKey = keyPair.getPublic();
 
-            byte[] bytes = crypt.stringFromPrivateKey(privateKey).getBytes();
+            byte[] bytes = crypt.stringFromPrivateKey(privateKey).getBytes("UTF-8");
             FileOutputStream outputStream = activity.openFileOutput(".privatekey", Context.MODE_PRIVATE);
             outputStream.write(bytes, 0, bytes.length);
 
-            bytes = crypt.stringFromPublicKey(publicKey).getBytes();
+            bytes = crypt.stringFromPublicKey(publicKey).getBytes("UTF-8");
             outputStream = activity.openFileOutput(".publickey", Context.MODE_PRIVATE);
             outputStream.write(bytes, 0, bytes.length);
 
