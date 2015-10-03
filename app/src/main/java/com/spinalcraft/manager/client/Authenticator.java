@@ -3,6 +3,8 @@ package com.spinalcraft.manager.client;
 import android.app.Activity;
 import android.content.Context;
 
+import com.google.gson.JsonObject;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,26 +15,70 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import javax.crypto.SecretKey;
+
 /**
  * Created by Parker on 10/2/2015.
  */
 public class Authenticator {
     private Crypt crypt;
     private MainActivity activity;
+    private String privateKey;
+    private String publicKey;
 
     public Authenticator(MainActivity activity){
         this.activity = activity;
         crypt = new Crypt();
         verifyKeysExist();
 //        generateKeys();
+//
+//        String test = "Hello Worrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrld!";
+//
+//        try {
+//            SecretKey key = crypt.generateSecretKey();
+//            byte[] cipher = crypt.encryptMessage(key, test);
+//            System.out.println("Original key: " + crypt.decode(key.getEncoded()));
+//            byte[] keyCipher = crypt.encryptKey(crypt.loadPublicKey(getPublicKey()), key);
+//            System.out.println("Key Cipher: " + crypt.decode(keyCipher));
+//
+//
+//            SecretKey newKey = crypt.decryptKey(crypt.loadPrivateKey(getPrivateKey()), keyCipher);
+//
+//            System.out.println("New key: " + crypt.decode(newKey.getEncoded()));
+//
+//            System.out.println("Access request JSON: " + getAccessRequest("1234").toString());
+//
+////            String keystring = crypt.stringFromSecretKey(key);
+////            System.out.println("Secret key: " + keystring);
+//            System.out.println("Cipher: " + crypt.decode(cipher));
+//            String result = crypt.decryptMessage(newKey, cipher);
+//            System.out.println("Result: " + result);
+//
+//        } catch (GeneralSecurityException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    public JsonObject getAccessRequest(String accessKey){
+        JsonObject obj = new JsonObject();
+        obj.addProperty("intent", "access");
+        obj.addProperty("accessKey", accessKey);
+        obj.addProperty("publicKey", getPublicKey());
+        return obj;
     }
 
     public String getPublicKey(){
-        return getKey(".publickey");
+        if(publicKey == null){
+            publicKey = getKey(".publickey");
+        }
+        return publicKey;
     }
 
     public String getPrivateKey(){
-        return getKey(".privatekey");
+        if(privateKey == null){
+            privateKey = getKey(".privatekey");
+        }
+        return privateKey;
     }
 
     private String getKey(String filename){
@@ -40,7 +86,7 @@ public class Authenticator {
         try {
             FileInputStream inputStream = activity.openFileInput(filename);
             inputStream.read(buffer, 0, 1024);
-            return new String(buffer, "UTF-8");
+            return nullTerminate(new String(buffer, "UTF-8"));
         } catch (FileNotFoundException e) {
             generateKeys();
             return getKey(filename);
@@ -48,6 +94,10 @@ public class Authenticator {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private String nullTerminate(String str){
+        return str.substring(0, str.indexOf('\0'));
     }
 
     private void verifyKeysExist(){

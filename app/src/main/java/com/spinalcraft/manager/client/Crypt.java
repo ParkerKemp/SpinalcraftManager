@@ -9,12 +9,12 @@ import com.spinalcraft.easycrypt.EasyCrypt;
  */
 public class Crypt extends EasyCrypt {
     @Override
-    protected byte[] decode(String s) {
-        return Base64.decode(s, Base64.DEFAULT);
+    protected byte[] encode(String s) {
+        return Base64.decode(s.getBytes(), Base64.DEFAULT);
     }
 
     @Override
-    protected String encode(byte[] bytes) {
+    protected String decode(byte[] bytes) {
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 }
