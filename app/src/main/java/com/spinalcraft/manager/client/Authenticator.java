@@ -21,6 +21,7 @@ public class Authenticator {
     private MainActivity activity;
 
     public Authenticator(MainActivity activity){
+        this.activity = activity;
         crypt = new Crypt();
         verifyKeysExist();
     }
