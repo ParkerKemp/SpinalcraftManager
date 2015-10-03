@@ -29,7 +29,10 @@ public class MainActivity extends AppCompatActivity {
         output = (TextView)findViewById(R.id.textView);
         output.setText("TEST");
         (new Thread(new Connector())).start();
-        new Authenticator();
+        Authenticator auth = new Authenticator(this);
+        System.out.println("Private key as string: " + auth.getPrivateKey());
+        System.out.println("Public key as string: " + auth.getPublicKey());
+
     }
 
     @Override
