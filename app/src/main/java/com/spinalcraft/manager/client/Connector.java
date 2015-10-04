@@ -22,10 +22,9 @@ public class Connector implements Runnable {
             if(socket.isConnected()){
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintStream printer = new PrintStream(socket.getOutputStream());
-                String request = auth.getAccessRequest("derp");
-                System.out.println("Sending request: " + request);
+                auth.sendAccessRequest(printer, "derp");
                 System.out.println("Public key: " + auth.getPublicKey());
-                printer.print(request + "\n");
+
                 System.out.println("Connected!");
                 String response = reader.readLine();
                 System.out.println(response);

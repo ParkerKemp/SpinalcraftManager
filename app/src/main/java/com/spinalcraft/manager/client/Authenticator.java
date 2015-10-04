@@ -1,9 +1,9 @@
 package com.spinalcraft.manager.client;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.google.gson.JsonObject;
+import com.spinalcraft.easycrypt.Messenger;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -75,6 +76,14 @@ public class Authenticator {
         request += "accessKey:" + accessKey + "\n";
         request += "publicKey:" + StringEscapeUtils.escapeJava(getPublicKey()) + "\n";
         return request;
+    }
+
+    public void sendAccessRequest(PrintStream printer, String accessKey){
+        Messenger messenger = new Messenger();
+        messenger.add("intent", "access");
+        messenger.add("accessKey", accessKey);
+        messenger.add("publicKey", getPublicKey());
+        messenger.sendMessage(printer);
     }
 
     public String getPublicKey(){
