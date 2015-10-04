@@ -1,5 +1,7 @@
 package com.spinalcraft.manager.client;
 
+import com.spinalcraft.easycrypt.messenger.MessageReceiver;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -22,12 +24,13 @@ public class Connector implements Runnable {
             if(socket.isConnected()){
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintStream printer = new PrintStream(socket.getOutputStream());
-                auth.sendAccessRequest(printer, "derp");
-                System.out.println("Public key: " + auth.getPublicKey());
-
-                System.out.println("Connected!");
-                String response = reader.readLine();
-                System.out.println(response);
+                if(auth.hasAccess()) {
+                    System.out.println("Have access! Secret Key: " + (new Crypt()).stringFromSecretKey(auth.getSecretKey()));
+                }
+                else{
+                    System.out.println("Requesting access...");
+                    auth.acquireAccess(reader, printer, "derp");
+                }
             }
             else{
                 System.out.println("Not Connected!");

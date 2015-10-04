@@ -2,16 +2,16 @@ package com.spinalcraft.manager.client;
 
 import android.content.Context;
 
-import com.google.gson.JsonObject;
-import com.spinalcraft.easycrypt.Messenger;
+import com.spinalcraft.easycrypt.messenger.MessageReceiver;
+import com.spinalcraft.easycrypt.messenger.MessageSender;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -26,78 +26,73 @@ import javax.crypto.SecretKey;
 public class Authenticator {
     private Crypt crypt;
     private MainActivity activity;
-    private String privateKey;
-    private String publicKey;
+    private PrivateKey privateKey;
+    private PublicKey publicKey;
+    private SecretKey secretKey;
+
+    private boolean hasAccess = false;
 
     public Authenticator(MainActivity activity){
         this.activity = activity;
         crypt = new Crypt();
         verifyKeysExist();
-        generateKeys();
+    }
 
-        String test = "Hello Worrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrld!";
+    public boolean acquireAccess(BufferedReader reader, PrintStream printer, String accessKey) throws GeneralSecurityException {
+        MessageSender sender = new MessageSender(printer);
+        sender.add("intent", "access");
+        sender.add("accessKey", accessKey);
+        sender.add("publicKey", crypt.stringFromPublicKey(getPublicKey()));
+        sender.sendMessage();
 
-        try {
-            SecretKey key = crypt.generateSecretKey();
-            byte[] cipher = crypt.encryptMessage(key, test);
-            System.out.println("Original key: " + crypt.encode(key.getEncoded()));
-            byte[] keyCipher = crypt.encryptKey(crypt.loadPublicKey(getPublicKey()), key);
-            System.out.println("Key Cipher: " + crypt.encode(keyCipher));
+        MessageReceiver receiver = new MessageReceiver(reader);
+        receiver.receiveMessage();
 
-            SecretKey newKey = crypt.decryptKey(crypt.loadPrivateKey(getPrivateKey()), keyCipher);
-
-            System.out.println("New key: " + crypt.encode(newKey.getEncoded()));
-
-//            System.out.println("Access request JSON: " + getAccessRequest("1234").toString());
-
-//            String keystring = crypt.stringFromSecretKey(key);
-//            System.out.println("Secret key: " + keystring);
-            System.out.println("Cipher: " + crypt.encode(cipher));
-            String result = crypt.decryptMessage(newKey, cipher);
-            System.out.println("Result: " + result);
-
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+        if(receiver.get("status").equals("GOOD")){
+            String secret = receiver.get("secret");
+            secretKey = crypt.decryptKey(getPrivateKey(), crypt.decode(secret));
+            saveKey(crypt.stringFromSecretKey(secretKey), ".secretkey");
+            hasAccess = true;
+            System.out.println("Acquired access! Secret key: " + crypt.stringFromSecretKey(secretKey));
+            return true;
         }
+        else{
+            System.out.println("Access was denied!");
+        }
+        return false;
     }
 
-    public JsonObject getAccessRequest2(String accessKey){
-        JsonObject obj = new JsonObject();
-        obj.addProperty("intent", "access");
-        obj.addProperty("accessKey", accessKey);
-        obj.addProperty("publicKey", getPublicKey());
-        return obj;
+    public boolean hasAccess(){
+        return hasAccess;
     }
 
-    public String getAccessRequest(String accessKey){
-
-        String request = "3" + "\n";
-        request += "intent:access\n";
-        request += "accessKey:" + accessKey + "\n";
-        request += "publicKey:" + StringEscapeUtils.escapeJava(getPublicKey()) + "\n";
-        return request;
-    }
-
-    public void sendAccessRequest(PrintStream printer, String accessKey){
-        Messenger messenger = new Messenger();
-        messenger.add("intent", "access");
-        messenger.add("accessKey", accessKey);
-        messenger.add("publicKey", getPublicKey());
-        messenger.sendMessage(printer);
-    }
-
-    public String getPublicKey(){
+    public PublicKey getPublicKey(){
         if(publicKey == null){
-            publicKey = getKey(".publickey");
+            try {
+                publicKey = crypt.loadPublicKey(getKey(".publickey"));
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            }
         }
         return publicKey;
     }
 
-    public String getPrivateKey(){
+    public PrivateKey getPrivateKey(){
         if(privateKey == null){
-            privateKey = getKey(".privatekey");
+            try {
+                privateKey = crypt.loadPrivateKey(getKey(".privatekey"));
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            }
         }
         return privateKey;
+    }
+
+    public SecretKey getSecretKey(){
+        if(secretKey == null && hasAccess){
+            secretKey = crypt.loadSecretKey(getKey(".secretkey"));
+        }
+        return secretKey;
     }
 
     private String getKey(String filename){
@@ -125,7 +120,13 @@ public class Authenticator {
             activity.openFileInput(".privatekey");
         } catch (FileNotFoundException e) {
             generateKeys();
-            System.out.println("Generating keys for the first time");
+            System.out.println("Generating keys for the first time.");
+        }
+        try {
+            activity.openFileInput(".secretkey");
+            hasAccess = true;
+        } catch (FileNotFoundException e) {
+            hasAccess = false;
         }
     }
 
@@ -135,19 +136,32 @@ public class Authenticator {
             PrivateKey privateKey = keyPair.getPrivate();
             PublicKey publicKey = keyPair.getPublic();
 
-            byte[] bytes = crypt.stringFromPrivateKey(privateKey).getBytes("UTF-8");
-            FileOutputStream outputStream = activity.openFileOutput(".privatekey", Context.MODE_PRIVATE);
-            outputStream.write(bytes, 0, bytes.length);
+//            byte[] bytes = crypt.stringFromPrivateKey(privateKey).getBytes("UTF-8");
+//            FileOutputStream outputStream = activity.openFileOutput(".privatekey", Context.MODE_PRIVATE);
+//            outputStream.write(bytes, 0, bytes.length);
 
-            bytes = crypt.stringFromPublicKey(publicKey).getBytes("UTF-8");
-            outputStream = activity.openFileOutput(".publickey", Context.MODE_PRIVATE);
-            outputStream.write(bytes, 0, bytes.length);
+            saveKey(crypt.stringFromPrivateKey(privateKey), ".privatekey");
+            saveKey(crypt.stringFromPublicKey(publicKey), ".publickey");
+
+//            bytes = crypt.stringFromPublicKey(publicKey).getBytes("UTF-8");
+//            outputStream = activity.openFileOutput(".publickey", Context.MODE_PRIVATE);
+//            outputStream.write(bytes, 0, bytes.length);
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveKey(String keyString, String filename){
+        try {
+            byte[] bytes = keyString.getBytes("UTF-8");
+            FileOutputStream outputStream = activity.openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(bytes, 0, bytes.length);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
