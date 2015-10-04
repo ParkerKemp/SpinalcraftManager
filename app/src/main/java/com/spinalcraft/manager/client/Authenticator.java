@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.google.gson.JsonObject;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -41,7 +43,6 @@ public class Authenticator {
             byte[] keyCipher = crypt.encryptKey(crypt.loadPublicKey(getPublicKey()), key);
             System.out.println("Key Cipher: " + crypt.encode(keyCipher));
 
-
             SecretKey newKey = crypt.decryptKey(crypt.loadPrivateKey(getPrivateKey()), keyCipher);
 
             System.out.println("New key: " + crypt.encode(newKey.getEncoded()));
@@ -72,7 +73,7 @@ public class Authenticator {
         String request = "3" + "\n";
         request += "intent:access\n";
         request += "accessKey:" + accessKey + "\n";
-        request += "publicKey:" + getPublicKey().replace("\\", "\\\\") + "\n";
+        request += "publicKey:" + StringEscapeUtils.escapeJava(getPublicKey()) + "\n";
         return request;
     }
 
