@@ -30,41 +30,50 @@ public class Authenticator {
         this.activity = activity;
         crypt = new Crypt();
         verifyKeysExist();
-//        generateKeys();
-//
-//        String test = "Hello Worrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrld!";
-//
-//        try {
-//            SecretKey key = crypt.generateSecretKey();
-//            byte[] cipher = crypt.encryptMessage(key, test);
-//            System.out.println("Original key: " + crypt.decode(key.getEncoded()));
-//            byte[] keyCipher = crypt.encryptKey(crypt.loadPublicKey(getPublicKey()), key);
-//            System.out.println("Key Cipher: " + crypt.decode(keyCipher));
-//
-//
-//            SecretKey newKey = crypt.decryptKey(crypt.loadPrivateKey(getPrivateKey()), keyCipher);
-//
-//            System.out.println("New key: " + crypt.decode(newKey.getEncoded()));
-//
+        generateKeys();
+
+        String test = "Hello Worrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrld!";
+
+        try {
+            SecretKey key = crypt.generateSecretKey();
+            byte[] cipher = crypt.encryptMessage(key, test);
+            System.out.println("Original key: " + crypt.encode(key.getEncoded()));
+            byte[] keyCipher = crypt.encryptKey(crypt.loadPublicKey(getPublicKey()), key);
+            System.out.println("Key Cipher: " + crypt.encode(keyCipher));
+
+
+            SecretKey newKey = crypt.decryptKey(crypt.loadPrivateKey(getPrivateKey()), keyCipher);
+
+            System.out.println("New key: " + crypt.encode(newKey.getEncoded()));
+
 //            System.out.println("Access request JSON: " + getAccessRequest("1234").toString());
-//
-////            String keystring = crypt.stringFromSecretKey(key);
-////            System.out.println("Secret key: " + keystring);
-//            System.out.println("Cipher: " + crypt.decode(cipher));
-//            String result = crypt.decryptMessage(newKey, cipher);
-//            System.out.println("Result: " + result);
-//
-//        } catch (GeneralSecurityException e) {
-//            e.printStackTrace();
-//        }
+
+//            String keystring = crypt.stringFromSecretKey(key);
+//            System.out.println("Secret key: " + keystring);
+            System.out.println("Cipher: " + crypt.encode(cipher));
+            String result = crypt.decryptMessage(newKey, cipher);
+            System.out.println("Result: " + result);
+
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
     }
 
-    public JsonObject getAccessRequest(String accessKey){
+    public JsonObject getAccessRequest2(String accessKey){
         JsonObject obj = new JsonObject();
         obj.addProperty("intent", "access");
         obj.addProperty("accessKey", accessKey);
         obj.addProperty("publicKey", getPublicKey());
         return obj;
+    }
+
+    public String getAccessRequest(String accessKey){
+
+        String request = "3" + "\n";
+        request += "intent:access\n";
+        request += "accessKey:" + accessKey + "\n";
+        request += "publicKey:" + getPublicKey().replace("\\", "\\\\") + "\n";
+        return request;
     }
 
     public String getPublicKey(){
@@ -86,7 +95,7 @@ public class Authenticator {
         try {
             FileInputStream inputStream = activity.openFileInput(filename);
             inputStream.read(buffer, 0, 1024);
-            return nullTerminate(new String(buffer, "UTF-8"));
+            return nullTerminate(new String(buffer));
         } catch (FileNotFoundException e) {
             generateKeys();
             return getKey(filename);

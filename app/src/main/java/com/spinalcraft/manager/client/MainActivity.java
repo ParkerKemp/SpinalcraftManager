@@ -28,11 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         output = (TextView)findViewById(R.id.textView);
         output.setText("TEST");
-        (new Thread(new Connector())).start();
-        Authenticator auth = new Authenticator(this);
-        System.out.println("Private key as string: " + auth.getPrivateKey());
-        System.out.println("Public key as string: " + auth.getPublicKey());
-
+        (new Thread(new Connector(this))).start();
     }
 
     @Override
