@@ -1,12 +1,15 @@
 package com.spinalcraft.manager.client;
 
 import com.spinalcraft.easycrypt.messenger.MessageReceiver;
+import com.spinalcraft.easycrypt.messenger.MessageSender;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.security.GeneralSecurityException;
 
 public class Connector implements Runnable {
     Authenticator auth;
@@ -17,10 +20,8 @@ public class Connector implements Runnable {
 
     @Override
     public void run(){
-        Socket socket = null;
+        Socket socket = connectToServer();
         try {
-            socket = new Socket();
-            socket.connect(new InetSocketAddress("mc.spinalcraft.com", 9494), 5000);
             if(socket.isConnected()){
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintStream printer = new PrintStream(socket.getOutputStream());
@@ -31,11 +32,50 @@ public class Connector implements Runnable {
                     System.out.println("Requesting access...");
                     auth.acquireAccess(reader, printer, "GIMME");
                 }
+                sendTestMessage();
             }
             else{
                 System.out.println("Not Connected!");
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Socket connectToServer(){
+        Socket socket = new Socket();
+        try {
+            socket.connect(new InetSocketAddress("mc.spinalcraft.com", 9494), 5000);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return socket;
+    }
+
+    private void sendTestMessage(){
+        try {
+            Socket socket = connectToServer();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintStream printer = new PrintStream(socket.getOutputStream());
+            Crypt crypt = new Crypt();
+            MessageSender sender = new MessageSender(printer);
+            sender.addHeader("intent", "message");
+            sender.addHeader("publicKey", crypt.stringFromPublicKey(auth.getPublicKey()));
+            sender.addItem("message", "YO WHAT UP");
+            sender.sendEncrypted(auth.getSecretKey(), crypt);
+
+            MessageReceiver receiver = new MessageReceiver(reader);
+            receiver.receiveMessage();
+            if(receiver.needsSecretKey()){
+                receiver.decrypt(auth.getSecretKey(), crypt);
+            }
+            System.out.println("Got back: " + receiver.getItem("message"));
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

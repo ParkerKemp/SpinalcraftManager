@@ -54,6 +54,7 @@ public class Authenticator {
             saveKey(crypt.stringFromSecretKey(secretKey), ".secretkey");
             hasAccess = true;
             System.out.println("Acquired access! Secret key: " + crypt.stringFromSecretKey(secretKey));
+
             return true;
         }
         else{
