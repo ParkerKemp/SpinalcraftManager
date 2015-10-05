@@ -40,16 +40,16 @@ public class Authenticator {
 
     public boolean acquireAccess(BufferedReader reader, PrintStream printer, String accessKey) throws GeneralSecurityException {
         MessageSender sender = new MessageSender(printer);
-        sender.add("intent", "access");
-        sender.add("accessKey", accessKey);
-        sender.add("publicKey", crypt.stringFromPublicKey(getPublicKey()));
+        sender.addHeader("intent", "access");
+        sender.addItem("accessKey", accessKey);
+        sender.addHeader("publicKey", crypt.stringFromPublicKey(getPublicKey()));
         sender.sendMessage();
 
         MessageReceiver receiver = new MessageReceiver(reader);
         receiver.receiveMessage();
 
-        if(receiver.get("status").equals("GOOD")){
-            String secret = receiver.get("secret");
+        if(receiver.getHeader("status").equals("GOOD")){
+            String secret = receiver.getItem("secret");
             secretKey = crypt.decryptKey(getPrivateKey(), crypt.decode(secret));
             saveKey(crypt.stringFromSecretKey(secretKey), ".secretkey");
             hasAccess = true;
@@ -136,17 +136,8 @@ public class Authenticator {
             PrivateKey privateKey = keyPair.getPrivate();
             PublicKey publicKey = keyPair.getPublic();
 
-//            byte[] bytes = crypt.stringFromPrivateKey(privateKey).getBytes("UTF-8");
-//            FileOutputStream outputStream = activity.openFileOutput(".privatekey", Context.MODE_PRIVATE);
-//            outputStream.write(bytes, 0, bytes.length);
-
             saveKey(crypt.stringFromPrivateKey(privateKey), ".privatekey");
             saveKey(crypt.stringFromPublicKey(publicKey), ".publickey");
-
-//            bytes = crypt.stringFromPublicKey(publicKey).getBytes("UTF-8");
-//            outputStream = activity.openFileOutput(".publickey", Context.MODE_PRIVATE);
-//            outputStream.write(bytes, 0, bytes.length);
-
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (GeneralSecurityException e) {

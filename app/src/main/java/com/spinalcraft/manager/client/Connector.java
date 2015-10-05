@@ -29,7 +29,7 @@ public class Connector implements Runnable {
                 }
                 else{
                     System.out.println("Requesting access...");
-                    auth.acquireAccess(reader, printer, "derp");
+                    auth.acquireAccess(reader, printer, "GIMME");
                 }
             }
             else{
