@@ -23,22 +23,19 @@ public class Connector implements Runnable {
         Socket socket = connectToServer();
         try {
             if(socket.isConnected()){
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintStream printer = new PrintStream(socket.getOutputStream());
                 if(auth.hasAccess()) {
                     System.out.println("Have access! Secret Key: " + (new Crypt()).stringFromSecretKey(auth.getSecretKey()));
                 }
                 else{
                     System.out.println("Requesting access...");
-                    auth.acquireAccess(reader, printer, "GIMME");
+                    auth.acquireAccess(socket, "GIMME");
                 }
-                sendTestMessage();
+                if(auth.hasAccess())
+                    sendTestMessage();
             }
             else{
                 System.out.println("Not Connected!");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
@@ -58,20 +55,16 @@ public class Connector implements Runnable {
     private void sendTestMessage(){
         try {
             Socket socket = connectToServer();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintStream printer = new PrintStream(socket.getOutputStream());
             Crypt crypt = new Crypt();
-            MessageSender sender = new MessageSender(printer);
+            MessageSender sender = new Sender(socket, crypt);
             sender.addHeader("intent", "message");
+            sender.setIdentifier(crypt.stringFromPublicKey(auth.getPublicKey()));
             sender.addHeader("publicKey", crypt.stringFromPublicKey(auth.getPublicKey()));
             sender.addItem("message", "YO WHAT UP");
-            sender.sendEncrypted(auth.getSecretKey(), crypt);
+            sender.sendEncrypted(auth.getSecretKey());
 
-            MessageReceiver receiver = new MessageReceiver(reader);
+            MessageReceiver receiver = new Receiver(socket, crypt, auth);
             receiver.receiveMessage();
-            if(receiver.needsSecretKey()){
-                receiver.decrypt(auth.getSecretKey(), crypt);
-            }
             System.out.println("Got back: " + receiver.getItem("message"));
         } catch (GeneralSecurityException e) {
             e.printStackTrace();

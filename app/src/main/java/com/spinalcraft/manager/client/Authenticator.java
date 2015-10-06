@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -38,14 +39,15 @@ public class Authenticator {
         verifyKeysExist();
     }
 
-    public boolean acquireAccess(BufferedReader reader, PrintStream printer, String accessKey) throws GeneralSecurityException {
-        MessageSender sender = new MessageSender(printer);
+    public boolean acquireAccess(Socket socket, String accessKey) throws GeneralSecurityException {
+        MessageSender sender = new Sender(socket, crypt);
         sender.addHeader("intent", "access");
+        sender.setIdentifier(crypt.stringFromPublicKey(getPublicKey()));
         sender.addItem("accessKey", accessKey);
         sender.addHeader("publicKey", crypt.stringFromPublicKey(getPublicKey()));
         sender.sendMessage();
 
-        MessageReceiver receiver = new MessageReceiver(reader);
+        Receiver receiver = new Receiver(socket, crypt, this);
         receiver.receiveMessage();
 
         if(receiver.getHeader("status").equals("GOOD")){
