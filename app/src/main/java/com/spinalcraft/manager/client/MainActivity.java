@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FileIO.setActivity(this);
         Messenger.shouldShowDebug = true;
 
         Uri data = getIntent().getData();
