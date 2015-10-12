@@ -13,6 +13,7 @@ import java.net.Socket;
 public class AndroidClient extends BerberosClient {
     public AndroidClient(EasyCrypt crypt) {
         super(crypt);
+//        cacheTickets = false;
     }
 
     @Override
@@ -22,7 +23,11 @@ public class AndroidClient extends BerberosClient {
 
     @Override
     protected String retrieveSessionKey(String s) {
-        return FileIO.read(".session_" + s);
+        String filename = ".session_" + s;
+        if(!FileIO.exists(filename))
+            return null;
+
+        return FileIO.read(filename);
     }
 
     @Override
@@ -32,7 +37,11 @@ public class AndroidClient extends BerberosClient {
 
     @Override
     protected String retrieveTicket(String s) {
-        return FileIO.read(".ticket_" + s);
+        String filename = ".ticket_" + s;
+        if(!FileIO.exists(filename))
+            return null;
+
+        return FileIO.read(filename);
     }
 
     @Override

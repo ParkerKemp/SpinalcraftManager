@@ -31,6 +31,15 @@ public class FileIO {
         }
     }
 
+    public static boolean exists(String filename){
+        try {
+            FileInputStream inputStream = activity.openFileInput(filename);
+            return true;
+        } catch (FileNotFoundException e) {
+            return false;
+        }
+    }
+
     public static String read(String filename){
         byte[] buffer = new byte[1024];
         try {
