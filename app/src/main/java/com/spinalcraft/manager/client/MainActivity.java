@@ -8,8 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.spinalcraft.easycrypt.messenger.Messenger;
-
 public class MainActivity extends AppCompatActivity {
     TextView output;
 
@@ -19,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FileIO.setActivity(this);
-        Messenger.shouldShowDebug = true;
+//        Messenger.shouldShowDebug = true;
 
         Uri data = getIntent().getData();
         if(data != null){
