@@ -24,6 +24,10 @@
                 <data android:scheme="spinal" />
             </intent-filter>
         </activity>
+        <activity android:name="com.spinalcraft.manager.client.LoginActivity"
+            >
+
+        </activity>
     </application>
 
 </manifest>

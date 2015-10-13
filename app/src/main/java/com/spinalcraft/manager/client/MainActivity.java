@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         FileIO.setActivity(this);
         Messenger.shouldShowDebug = true;
@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
         if(url != null)
             System.out.println(url);
 
-        output = (TextView)findViewById(R.id.textView);
-        output.setText("TEST");
+        loginPrompt();
+
         (new Thread(new Connector(this))).start();
     }
 
@@ -56,5 +56,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loginPrompt(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }
