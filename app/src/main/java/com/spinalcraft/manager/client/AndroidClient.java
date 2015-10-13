@@ -13,7 +13,7 @@ import java.net.Socket;
 public class AndroidClient extends BerberosClient {
     public AndroidClient(EasyCrypt crypt) {
         super(crypt);
-        cacheTickets = false;
+//        cacheTickets = false;
     }
 
     @Override
