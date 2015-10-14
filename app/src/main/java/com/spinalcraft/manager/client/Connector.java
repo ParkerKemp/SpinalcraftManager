@@ -23,7 +23,7 @@ public class Connector implements Runnable {
     public void run(){
         Socket socket = connectToServer();
         if(socket != null && socket.isConnected()){
-            AndroidClient client = new AndroidClient(new Crypt());
+            AndroidClient client = new AndroidClient(Crypt.getInstance());
             ClientAmbassador ambassador = client.getAmbassador(socket, "derp4", "asdf1234", "manager");
             if(ambassador == null) {
                 System.err.println("Authentication failed!");

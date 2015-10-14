@@ -49,7 +49,7 @@ public class LoginActivity extends Activity {
         System.out.println("Attempting login.");
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
-
-
+        
+        new LoginTask().execute(username, password);
     }
 }
