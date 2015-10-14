@@ -1,6 +1,7 @@
 package com.spinalcraft.manager.client;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -49,7 +50,17 @@ public class LoginActivity extends Activity {
         System.out.println("Attempting login.");
         System.out.println("Username: " + username);
         System.out.println("Password: " + password);
-        
-        new LoginTask().execute(username, password);
+
+        new LoginTask(username, password, this, new Command() {
+            @Override
+            public void execute(Object... data) {
+                Activity activity = (Activity)data[0];
+                boolean success = (Boolean)data[1];
+                if(success){
+                    Intent intent = new Intent(activity, MainActivity.class);
+                    activity.startActivity(intent);
+                }
+            }
+        }).execute();
     }
 }
