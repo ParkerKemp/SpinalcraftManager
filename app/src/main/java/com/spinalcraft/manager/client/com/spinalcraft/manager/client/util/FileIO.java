@@ -1,4 +1,4 @@
-package com.spinalcraft.manager.client;
+package com.spinalcraft.manager.client.com.spinalcraft.manager.client.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,7 +33,7 @@ public class FileIO {
 
     public static boolean exists(String filename){
         try {
-            FileInputStream inputStream = activity.openFileInput(filename);
+            activity.openFileInput(filename);
             return true;
         } catch (FileNotFoundException e) {
             return false;

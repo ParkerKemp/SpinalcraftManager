@@ -1,4 +1,4 @@
-package com.spinalcraft.manager.client;
+package com.spinalcraft.manager.client.com.spinalcraft.manager.client.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -6,20 +6,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
+import com.spinalcraft.berberos.common.BerberosError.ErrorCode;
 import com.spinalcraft.easycrypt.messenger.Messenger;
+import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.Command;
+import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.FileIO;
+import com.spinalcraft.manager.client.com.spinalcraft.manager.client.com.spinalcraft.manager.client.task.LoginTask;
+import com.spinalcraft.manager.client.R;
 
 public class MainActivity extends AppCompatActivity {
-    TextView output;
+    public static final int LoginRequest = 0;
+//    private TextView output;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        FileIO.setActivity(this);
-        Messenger.shouldShowDebug = true;
 
         Uri data = getIntent().getData();
         if(data != null){
@@ -30,10 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         if(url != null)
             System.out.println(url);
-
-
-        cachedLogin();
-//        loginPrompt();
 
 //        (new Thread(new Connector(this))).start();
     }
@@ -70,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void execute(Object... data) {
 //                    Activity activity = (Activity)data[0];
-                    boolean success = (Boolean)data[1];
-                    if(!success) {
+                    ErrorCode code = (ErrorCode)data[1];
+                    if(code != ErrorCode.NONE) {
                         loginPrompt();
                         System.out.println("Failure");
                     }
@@ -83,6 +81,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void loginPrompt(){
         Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, LoginRequest);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == LoginRequest){
+            if(resultCode == RESULT_OK){
+                System.out.println("Success?");
+            }
+        }
     }
 }

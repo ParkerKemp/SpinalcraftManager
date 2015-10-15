@@ -1,17 +1,15 @@
 package com.spinalcraft.manager.client;
 
 import com.spinalcraft.berberos.client.ClientAmbassador;
-import com.spinalcraft.berberos.common.Ambassador;
 import com.spinalcraft.easycrypt.messenger.MessageReceiver;
 import com.spinalcraft.easycrypt.messenger.MessageSender;
+import com.spinalcraft.manager.client.com.spinalcraft.manager.client.activity.MainActivity;
+import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.AndroidClient;
+import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.Crypt;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.security.GeneralSecurityException;
 
 public class Connector implements Runnable {
 

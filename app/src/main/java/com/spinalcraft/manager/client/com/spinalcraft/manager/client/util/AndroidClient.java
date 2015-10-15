@@ -1,9 +1,12 @@
-package com.spinalcraft.manager.client;
+package com.spinalcraft.manager.client.com.spinalcraft.manager.client.util;
 
 import com.spinalcraft.berberos.client.BerberosClient;
 import com.spinalcraft.easycrypt.EasyCrypt;
 import com.spinalcraft.easycrypt.messenger.MessageReceiver;
 import com.spinalcraft.easycrypt.messenger.MessageSender;
+import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.FileIO;
+import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.Receiver;
+import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.Sender;
 
 import java.net.Socket;
 

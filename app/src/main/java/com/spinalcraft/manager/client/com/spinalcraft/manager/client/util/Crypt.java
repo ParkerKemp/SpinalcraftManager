@@ -1,4 +1,4 @@
-package com.spinalcraft.manager.client;
+package com.spinalcraft.manager.client.com.spinalcraft.manager.client.util;
 
 import android.util.Base64;
 
