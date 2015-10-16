@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logout(){
-        FileIO.delete(".password");
+        FileIO.delete(".password", this);
         finish();
     }
 }

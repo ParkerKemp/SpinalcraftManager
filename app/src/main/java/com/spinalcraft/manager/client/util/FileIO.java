@@ -13,29 +13,21 @@ import java.io.UnsupportedEncodingException;
  * Created by Parker on 10/11/2015.
  */
 public class FileIO {
-    private static Activity activity;
-
-    public static void setActivity(Activity activity){
-        FileIO.activity = activity;
-    }
-
-    public static void write(String filename, String str){
+    public static void write(String filename, String str, Activity activity){
         try {
             byte[] bytes = str.getBytes("UTF-8");
             FileOutputStream outputStream = activity.openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(bytes, 0, bytes.length);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void delete(String filename){
+    public static void delete(String filename, Activity activity){
         activity.deleteFile(filename);
     }
 
-    public static boolean exists(String filename){
+    public static boolean exists(String filename, Activity activity){
         try {
             activity.openFileInput(filename);
             return true;
@@ -44,7 +36,7 @@ public class FileIO {
         }
     }
 
-    public static String read(String filename){
+    public static String read(String filename, Activity activity){
         byte[] buffer = new byte[1024];
         try {
             FileInputStream inputStream = activity.openFileInput(filename);

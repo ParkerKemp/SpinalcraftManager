@@ -31,7 +31,6 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        FileIO.setActivity(this);
         Messenger.shouldShowDebug = true;
 
         usernameEdit = (EditText)findViewById(R.id.username);
@@ -59,8 +58,8 @@ public class LoginActivity extends Activity {
     }
 
     private void cachedLogin(){
-        cachedUsername = FileIO.read(".username");
-        cachedPassword = FileIO.read(".password");
+        cachedUsername = FileIO.read(".username", this);
+        cachedPassword = FileIO.read(".password", this);
 
         if(cachedUsername != null) {
             usernameEdit.setText(cachedUsername);

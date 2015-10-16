@@ -1,5 +1,7 @@
 package com.spinalcraft.manager.client.util;
 
+import android.app.Activity;
+
 import com.spinalcraft.berberos.client.BerberosClient;
 import com.spinalcraft.easycrypt.EasyCrypt;
 import com.spinalcraft.easycrypt.messenger.MessageReceiver;
@@ -11,37 +13,40 @@ import java.net.Socket;
  * Created by Parker on 10/11/2015.
  */
 public class AndroidClient extends BerberosClient {
-    public AndroidClient(EasyCrypt crypt) {
+    private Activity activity;
+
+    public AndroidClient(EasyCrypt crypt, Activity activity) {
         super(crypt);
+        this.activity = activity;
 //        cacheTickets = false;
     }
 
     @Override
     protected void cacheSessionKey(String s, String s1) {
-        FileIO.write(".session_" + s, s1);
+        FileIO.write(".session_" + s, s1, activity);
     }
 
     @Override
     protected String retrieveSessionKey(String s) {
         String filename = ".session_" + s;
-        if(!FileIO.exists(filename))
+        if(!FileIO.exists(filename, activity))
             return null;
 
-        return FileIO.read(filename);
+        return FileIO.read(filename, activity);
     }
 
     @Override
     protected void cacheTicket(String s, String s1) {
-        FileIO.write(".ticket_" + s, s1);
+        FileIO.write(".ticket_" + s, s1, activity);
     }
 
     @Override
     protected String retrieveTicket(String s) {
         String filename = ".ticket_" + s;
-        if(!FileIO.exists(filename))
+        if(!FileIO.exists(filename, activity))
             return null;
 
-        return FileIO.read(filename);
+        return FileIO.read(filename, activity);
     }
 
     @Override
