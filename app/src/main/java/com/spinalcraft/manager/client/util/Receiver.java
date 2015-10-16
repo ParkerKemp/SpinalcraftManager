@@ -1,4 +1,4 @@
-package com.spinalcraft.manager.client.com.spinalcraft.manager.client.util;
+package com.spinalcraft.manager.client.util;
 
 import com.spinalcraft.easycrypt.EasyCrypt;
 import com.spinalcraft.easycrypt.messenger.MessageReceiver;

@@ -1,4 +1,4 @@
-package com.spinalcraft.manager.client.com.spinalcraft.manager.client.activity;
+package com.spinalcraft.manager.client.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.spinalcraft.berberos.common.BerberosError.ErrorCode;
 import com.spinalcraft.berberos.common.BerberosError;
 import com.spinalcraft.easycrypt.messenger.Messenger;
-import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.Command;
-import com.spinalcraft.manager.client.com.spinalcraft.manager.client.com.spinalcraft.manager.client.task.LoginTask;
 import com.spinalcraft.manager.client.R;
-import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.FileIO;
+import com.spinalcraft.manager.client.task.LoginTask;
+import com.spinalcraft.manager.client.util.Command;
+import com.spinalcraft.manager.client.util.FileIO;
 
 /**
  * Created by Parker on 10/12/2015.
@@ -55,17 +55,21 @@ public class LoginActivity extends Activity {
             }
         });
 
+        cachedLogin();
+    }
+
+    private void cachedLogin(){
         cachedUsername = FileIO.read(".username");
         cachedPassword = FileIO.read(".password");
 
         if(cachedUsername != null) {
             usernameEdit.setText(cachedUsername);
+            passwordEdit.requestFocus();
             if (cachedPassword != null) {
                 passwordEdit.setText(cachedPassword);
                 attemptLogin(cachedUsername, cachedPassword);
             }
         }
-
     }
 
     private void attemptLogin(String username, String password){
@@ -76,12 +80,20 @@ public class LoginActivity extends Activity {
                 BerberosError.ErrorCode code = (ErrorCode)data[1];
                 if(code == ErrorCode.NONE)
                     grantAccess();
+                else if(code == ErrorCode.AUTHENTICATION)
+                    passwordEdit.setText("");
             }
         }).execute();
     }
 
     private void grantAccess(){
         Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        passwordEdit.setText("");
+        passwordEdit.requestFocus();
     }
 }

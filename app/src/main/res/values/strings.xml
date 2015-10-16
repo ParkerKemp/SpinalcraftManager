@@ -3,4 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="drawerOpen">Open Drawer</string>
+    <string name="drawerClose">Close Drawer</string>
 </resources>

@@ -10,8 +10,8 @@
         android:label="@string/app_name"
         android:theme="@style/CustomActionBar" >
         <activity
-            android:name=".com.spinalcraft.manager.client.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:name="com.spinalcraft.manager.client.activity.MainActivity"
+            android:label="" >
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -20,7 +20,7 @@
                 <data android:scheme="spinal" />
             </intent-filter>
         </activity>
-        <activity android:name=".com.spinalcraft.manager.client.activity.LoginActivity">
+        <activity android:name="com.spinalcraft.manager.client.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

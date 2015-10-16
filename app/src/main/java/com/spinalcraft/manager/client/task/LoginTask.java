@@ -1,13 +1,13 @@
-package com.spinalcraft.manager.client.com.spinalcraft.manager.client.com.spinalcraft.manager.client.task;
+package com.spinalcraft.manager.client.task;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.AsyncTask;
 
-import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.AndroidClient;
-import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.Command;
-import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.Crypt;
-import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.FileIO;
+import com.spinalcraft.manager.client.util.AndroidClient;
+import com.spinalcraft.manager.client.util.Command;
+import com.spinalcraft.manager.client.util.Crypt;
+import com.spinalcraft.manager.client.util.FileIO;
 import com.spinalcraft.berberos.common.BerberosError.ErrorCode;
 
 /**

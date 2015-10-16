@@ -1,4 +1,4 @@
-package com.spinalcraft.manager.client.com.spinalcraft.manager.client.util;
+package com.spinalcraft.manager.client.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,6 +29,10 @@ public class FileIO {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void delete(String filename){
+        activity.deleteFile(filename);
     }
 
     public static boolean exists(String filename){

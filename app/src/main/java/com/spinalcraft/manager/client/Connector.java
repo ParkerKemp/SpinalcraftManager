@@ -3,9 +3,9 @@ package com.spinalcraft.manager.client;
 import com.spinalcraft.berberos.client.ClientAmbassador;
 import com.spinalcraft.easycrypt.messenger.MessageReceiver;
 import com.spinalcraft.easycrypt.messenger.MessageSender;
-import com.spinalcraft.manager.client.com.spinalcraft.manager.client.activity.MainActivity;
-import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.AndroidClient;
-import com.spinalcraft.manager.client.com.spinalcraft.manager.client.util.Crypt;
+import com.spinalcraft.manager.client.activity.MainActivity;
+import com.spinalcraft.manager.client.util.AndroidClient;
+import com.spinalcraft.manager.client.util.Crypt;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

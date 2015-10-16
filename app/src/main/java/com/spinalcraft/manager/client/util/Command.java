@@ -1,4 +1,4 @@
-package com.spinalcraft.manager.client.com.spinalcraft.manager.client.util;
+package com.spinalcraft.manager.client.util;
 
 /**
  * Created by Parker on 10/14/2015.
