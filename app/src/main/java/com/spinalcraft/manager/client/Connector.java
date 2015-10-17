@@ -13,15 +13,17 @@ import java.net.Socket;
 
 public class Connector implements Runnable {
 
-    public Connector(MainActivity activity){
+    private MainActivity activity;
 
+    public Connector(MainActivity activity){
+        this.activity = activity;
     }
 
     @Override
     public void run(){
         Socket socket = connectToServer();
         if(socket != null && socket.isConnected()){
-            AndroidClient client = new AndroidClient(Crypt.getInstance());
+            AndroidClient client = new AndroidClient(Crypt.getInstance(), activity);
             ClientAmbassador ambassador = client.getAmbassador(socket, "derp4", "asdf1234", "manager");
             if(ambassador == null) {
                 System.err.println("Authentication failed!");

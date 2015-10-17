@@ -28,12 +28,12 @@ public class LoginTask extends AsyncTask<Void, Void, ErrorCode> {
 
     @Override
     protected ErrorCode doInBackground(Void... params) {
-        AndroidClient client = new AndroidClient(Crypt.getInstance());
+        AndroidClient client = new AndroidClient(Crypt.getInstance(), activity);
 
         ErrorCode code = client.testCredentials(username, password);
         if(code == ErrorCode.NONE){
-            FileIO.write(".username", username);
-            FileIO.write(".password", password);
+            FileIO.write(".username", username, activity);
+            FileIO.write(".password", password, activity);
         }
         return code;
     }
