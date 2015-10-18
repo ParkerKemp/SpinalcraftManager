@@ -26,10 +26,12 @@ import java.util.ArrayList;
 public class ApplicationListTask extends AsyncTask<Void, Void, ArrayList<Application>> {
 
     private Activity activity;
+    private String filter;
     private Command command;
 
-    public ApplicationListTask(Activity activity, Command command){
+    public ApplicationListTask(Activity activity, String filter, Command command){
         this.activity = activity;
+        this.filter = filter;
         this.command = command;
     }
 
@@ -47,6 +49,7 @@ public class ApplicationListTask extends AsyncTask<Void, Void, ArrayList<Applica
 
         MessageSender sender = ambassador.getSender();
         sender.addHeader("intent", "applicationList");
+        sender.addItem("filter", filter);
         ambassador.sendMessage(sender);
         MessageReceiver receiver = ambassador.receiveMessage();
         if(receiver == null)
@@ -70,6 +73,7 @@ public class ApplicationListTask extends AsyncTask<Void, Void, ArrayList<Applica
     private Socket connectToServer(){
         Socket socket = new Socket();
         try {
+            socket.setSoTimeout(5000);
             socket.connect(new InetSocketAddress("mc.spinalcraft.com", 9495), 5000);
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,6 +1,12 @@
 <resources>
-    <style name="CustomActionBar" parent="@style/Theme.AppCompat.Light">
+
+    <style name="ToolbarTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <style name="ActionBarTheme" parent="@style/Theme.AppCompat.Light">
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="actionBarStyle">@style/ActionBarStyle</item>
     </style>
 

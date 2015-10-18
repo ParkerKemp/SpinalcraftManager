@@ -29,15 +29,15 @@ public class NavActivity extends BaseActivity {
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
+    public void onStart(){
+        super.onStart();
         String[] array = {"Applications", "Log out"};
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawerLayout);
         ListView drawerList = (ListView)findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter(this, R.layout.item_drawer_list, array));
-        drawerList.setOnItemClickListener(new DrawerClickListener(this));
+        drawerList.setOnItemClickListener(new DrawerClickListener(this, drawer));
 
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawerOpen, R.string.drawerClose){
             public void onDrawerClosed(View view)
@@ -59,6 +59,12 @@ public class NavActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         toggle.syncState();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
     }
 
     @Override
