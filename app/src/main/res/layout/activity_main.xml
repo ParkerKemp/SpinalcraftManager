@@ -8,12 +8,19 @@
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/drawerLayout">
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        </FrameLayout>
+            <TextView
+                android:layout_height="15dp"
+                android:layout_width="match_parent"
+                android:text="HELLO">
+
+            </TextView>
+        </LinearLayout>
         <ListView android:id="@+id/left_drawer"
             android:layout_width="240dp"
             android:layout_height="match_parent"
@@ -23,4 +30,5 @@
             android:dividerHeight="0dp"
             android:background="@android:color/white"/>
     </android.support.v4.widget.DrawerLayout>
+
 </LinearLayout>

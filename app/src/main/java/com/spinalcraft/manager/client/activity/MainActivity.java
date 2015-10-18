@@ -17,9 +17,8 @@ import com.spinalcraft.manager.client.DrawerClickListener;
 import com.spinalcraft.manager.client.R;
 import com.spinalcraft.manager.client.util.FileIO;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends NavActivity {
     public static final int LoginRequest = 0;
-    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,33 +35,7 @@ public class MainActivity extends AppCompatActivity {
         if(url != null)
             System.out.println(url);
 
-        String[] array = {"Applications", "Log out"};
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawerLayout);
-        ListView drawerList = (ListView)findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter(this, R.layout.item_drawer_list, array));
-        drawerList.setOnItemClickListener(new DrawerClickListener(this));
 
-        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawerOpen, R.string.drawerClose){
-            public void onDrawerClosed(View view)
-            {
-                super.onDrawerClosed(view);
-                invalidateOptionsMenu();
-                syncState();
-            }
-
-            public void onDrawerOpened(View drawerView)
-            {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-                syncState();
-            }
-        };
-        drawer.setDrawerListener(toggle);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        toggle.syncState();
 //        (new Thread(new Connector(this))).start();
     }
 
@@ -75,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(toggle.onOptionsItemSelected(item))
-            return true;
-
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -98,15 +68,5 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Success?");
             }
         }
-    }
-
-    public void openAppList(){
-        Intent intent = new Intent(this, ApplicationListActivity.class);
-        startActivity(intent);
-    }
-
-    public void logout(){
-        FileIO.delete(".password", this);
-        finish();
     }
 }

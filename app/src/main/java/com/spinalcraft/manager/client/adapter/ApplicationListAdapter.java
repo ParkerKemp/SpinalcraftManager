@@ -30,11 +30,18 @@ public class ApplicationListAdapter extends ArrayAdapter<Application> {
 
     @Override
     public int getCount(){
+        System.out.println("Got count: " + applications.size());
         return applications.size();
     }
 
     @Override
+    public Application getItem(int position) {
+        return applications.get(position);
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent){
+        System.out.println("TEST");
         if(convertView == null){
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_application_list, parent, false);

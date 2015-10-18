@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.spinalcraft.manager.client.activity.ApplicationListActivity">
+            android:name="com.spinalcraft.manager.client.activity.ApplicationListActivity"
+            android:label="">
         </activity>
         <activity android:name="com.spinalcraft.manager.client.activity.LoginActivity">
             <intent-filter>

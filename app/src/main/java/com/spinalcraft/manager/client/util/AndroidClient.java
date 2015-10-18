@@ -18,7 +18,7 @@ public class AndroidClient extends BerberosClient {
     public AndroidClient(EasyCrypt crypt, Activity activity) {
         super(crypt);
         this.activity = activity;
-//        cacheTickets = false;
+        cacheTickets = false;
     }
 
     @Override

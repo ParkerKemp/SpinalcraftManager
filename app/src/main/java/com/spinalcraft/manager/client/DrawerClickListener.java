@@ -1,20 +1,22 @@
 package com.spinalcraft.manager.client;
 
+import android.app.Activity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.spinalcraft.manager.client.activity.MainActivity;
+import com.spinalcraft.manager.client.activity.NavActivity;
 
 /**
  * Created by Parker on 10/15/2015.
  */
 public class DrawerClickListener implements OnItemClickListener {
 
-    private MainActivity activity;
+    private NavActivity activity;
 
-    public DrawerClickListener(MainActivity activity){
+    public DrawerClickListener(NavActivity activity){
         this.activity = activity;
     }
 
