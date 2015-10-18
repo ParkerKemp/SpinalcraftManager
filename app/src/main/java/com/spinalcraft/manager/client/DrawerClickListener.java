@@ -22,6 +22,9 @@ public class DrawerClickListener implements OnItemClickListener {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch(position){
             case 0:
+                activity.openAppList();
+                break;
+            case 1:
                 activity.logout();
                 break;
         }

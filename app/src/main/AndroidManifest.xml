@@ -20,6 +20,9 @@
                 <data android:scheme="spinal" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.spinalcraft.manager.client.activity.ApplicationListActivity">
+        </activity>
         <activity android:name="com.spinalcraft.manager.client.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

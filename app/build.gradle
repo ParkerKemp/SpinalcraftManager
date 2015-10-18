@@ -32,9 +32,9 @@ configurations.all {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.google.code.gson:gson:2.3.1'
-    compile 'com.spinalcraft:easycrypt:1.0.1'
-    compile 'com.spinalcraft:berbtools:1.0'
-    compile 'org.apache.commons:commons-lang3:3.4'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
+    compile group: "com.spinalcraft", name: "easycrypt", version: "1.0.1", changing: true
+    compile group: "com.spinalcraft", name: "berbtools", version: "1.0", changing: true
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
     compile 'com.android.support:support-v4:23.0.1'
 }

@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
         if(url != null)
             System.out.println(url);
 
-        String[] array = {"Log out"};
+        String[] array = {"Applications", "Log out"};
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawerLayout);
         ListView drawerList = (ListView)findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter(this, R.layout.drawer_list_item, array));
+        drawerList.setAdapter(new ArrayAdapter(this, R.layout.item_drawer_list, array));
         drawerList.setOnItemClickListener(new DrawerClickListener(this));
 
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawerOpen, R.string.drawerClose){
@@ -98,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Success?");
             }
         }
+    }
+
+    public void openAppList(){
+        Intent intent = new Intent(this, ApplicationListActivity.class);
+        startActivity(intent);
     }
 
     public void logout(){

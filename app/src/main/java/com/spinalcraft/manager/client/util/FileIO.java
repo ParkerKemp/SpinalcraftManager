@@ -16,7 +16,7 @@ public class FileIO {
     public static void write(String filename, String str, Activity activity){
         try {
             byte[] bytes = str.getBytes("UTF-8");
-            FileOutputStream outputStream = activity.openFileOutput(filename, Context.MODE_PRIVATE);
+            FileOutputStream outputStream = activity.getApplication().openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(bytes, 0, bytes.length);
         } catch (IOException e) {
             e.printStackTrace();
@@ -24,12 +24,12 @@ public class FileIO {
     }
 
     public static void delete(String filename, Activity activity){
-        activity.deleteFile(filename);
+        activity.getApplication().deleteFile(filename);
     }
 
     public static boolean exists(String filename, Activity activity){
         try {
-            activity.openFileInput(filename);
+            activity.getApplication().openFileInput(filename);
             return true;
         } catch (FileNotFoundException e) {
             return false;
@@ -39,7 +39,8 @@ public class FileIO {
     public static String read(String filename, Activity activity){
         byte[] buffer = new byte[1024];
         try {
-            FileInputStream inputStream = activity.openFileInput(filename);
+            FileInputStream inputStream = activity.getApplication().openFileInput(filename);
+
             inputStream.read(buffer, 0, 1024);
             return nullTerminate(new String(buffer));
         } catch (IOException e) {
