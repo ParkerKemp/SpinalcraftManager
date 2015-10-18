@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.AsyncTask;
 
+import com.spinalcraft.manager.client.activity.BaseActivity;
 import com.spinalcraft.manager.client.util.AndroidClient;
 import com.spinalcraft.manager.client.util.Command;
 import com.spinalcraft.manager.client.util.Crypt;
@@ -16,10 +17,10 @@ import com.spinalcraft.berberos.common.BerberosError.ErrorCode;
 public class LoginTask extends AsyncTask<Void, Void, ErrorCode> {
     private String username;
     private String password;
-    private Activity activity;
+    private BaseActivity activity;
     private Command command;
 
-    public LoginTask(String username, String password, Activity activity, Command command){
+    public LoginTask(String username, String password, BaseActivity activity, Command command){
         this.username = username;
         this.password = password;
         this.activity = activity;
@@ -40,37 +41,35 @@ public class LoginTask extends AsyncTask<Void, Void, ErrorCode> {
 
     @Override
     protected void onPostExecute(ErrorCode code){
-        if(code == ErrorCode.NONE){
-            System.out.println("Authentication succeeded!");
-        }
-        else
-            System.out.println("Authentication failed!");
         handleCode(code);
         command.execute(activity, code);
     }
 
     private void invalidResponse(){
-        new AlertDialog.Builder(activity)
-                .setTitle("Invalid response!")
-                .setMessage("Received an invalid response from authentication server!")
-                .setPositiveButton("OK", null)
-                .show();
+//        new AlertDialog.Builder(activity)
+//                .setTitle("Invalid response!")
+//                .setMessage("Received an invalid response from authentication server!")
+//                .setPositiveButton("OK", null)
+//                .show();
+        activity.shortToast("Received invalid response from authentication server.");
     }
 
     private void connectionFailed(){
-        new AlertDialog.Builder(activity)
-                .setTitle("Connection failed!")
-                .setMessage("Could not connect to authentication server!")
-                .setPositiveButton("OK", null)
-                .show();
+//        new AlertDialog.Builder(activity)
+//                .setTitle("Connection failed!")
+//                .setMessage("Could not connect to authentication server!")
+//                .setPositiveButton("OK", null)
+//                .show();
+        activity.shortToast("Could not connect to authentication server.");
     }
 
     private void accessDenied(){
-        new AlertDialog.Builder(activity)
-                .setTitle("Authentication failed!")
-                .setMessage("Username or password is invalid. Please try again.")
-                .setPositiveButton("OK", null)
-                .show();
+//        new AlertDialog.Builder(activity)
+//                .setTitle("Authentication failed!")
+//                .setMessage("Username or password is invalid. Please try again.")
+//                .setPositiveButton("OK", null)
+//                .show();
+        activity.shortToast("Invalid username or password.");
     }
 
     private void handleCode(ErrorCode code){

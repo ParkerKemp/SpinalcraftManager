@@ -1,9 +1,12 @@
 package com.spinalcraft.manager.client.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
+import android.view.Window;
 import android.widget.ListView;
 
 import com.spinalcraft.manager.client.Application;
@@ -14,10 +17,7 @@ import com.spinalcraft.manager.client.util.Command;
 
 import java.util.ArrayList;
 
-/**
- * Created by Parker on 10/17/2015.
- */
-public class ApplicationListActivity extends NavActivity implements OnRefreshListener{
+public class ApplicationListActivity extends BaseActivity implements OnRefreshListener{
     private SwipeRefreshLayout swipeLayout;
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -30,14 +30,26 @@ public class ApplicationListActivity extends NavActivity implements OnRefreshLis
         ListView listView = (ListView)findViewById(R.id.applicationListView);
         listView.setAdapter(new ApplicationListAdapter(this, R.layout.item_application_list, new ArrayList<Application>()));
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         getApplications();
-//        String[] array = {"Applications", "Log out"};
-//        listView.setAdapter(new ArrayAdapter(this, R.layout.item_drawer_list, array));
     }
 
     @Override
     public void onRefresh() {
         getApplications();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateAdapter(ArrayList<Application> applications){

@@ -1,6 +1,7 @@
 package com.spinalcraft.manager.client.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.spinalcraft.berberos.common.BerberosError.ErrorCode;
@@ -21,8 +24,10 @@ import com.spinalcraft.manager.client.util.FileIO;
 /**
  * Created by Parker on 10/12/2015.
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends BaseActivity {
 
+    private ProgressBar spinner;
+    private LinearLayout progressLayout;
     private String cachedUsername, cachedPassword;
     EditText usernameEdit, passwordEdit;
 
@@ -33,6 +38,11 @@ public class LoginActivity extends Activity {
 
         Messenger.shouldShowDebug = true;
 
+        progressLayout = (LinearLayout)findViewById(R.id.progressLayout);
+        progressLayout.setVisibility(View.GONE);
+//
+//        spinner = (ProgressBar)findViewById(R.id.progressBar);
+//        spinner.setVisibility(View.GONE);
         usernameEdit = (EditText)findViewById(R.id.username);
         passwordEdit = (EditText)findViewById(R.id.password);
         Button loginButton = (Button)findViewById(R.id.loginButton);
@@ -72,9 +82,18 @@ public class LoginActivity extends Activity {
     }
 
     private void attemptLogin(String username, String password){
+//        spinner.setVisibility(View.VISIBLE);
+        progressLayout.setVisibility(View.VISIBLE);
+//        ProgressDialog progress = new ProgressDialog(this);
+//        progress.setTitle("Loading");
+//        progress.setMessage("Wait while loading...");
+//        progress.setCancelable(false);
+//        progress.show();
         new LoginTask(username, password, this, new Command() {
             @Override
             public void execute(Object... data) {
+//                spinner.setVisibility(View.GONE);
+                progressLayout.setVisibility(View.GONE);
                 Activity activity = (Activity)data[0];
                 BerberosError.ErrorCode code = (ErrorCode)data[1];
                 if(code == ErrorCode.NONE)

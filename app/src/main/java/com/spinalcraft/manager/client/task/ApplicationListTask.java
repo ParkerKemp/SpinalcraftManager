@@ -37,6 +37,8 @@ public class ApplicationListTask extends AsyncTask<Void, Void, ArrayList<Applica
     protected ArrayList<Application> doInBackground(Void... params) {
         AndroidClient client = new AndroidClient(Crypt.getInstance(), activity);
         Socket socket = connectToServer();
+        if(socket == null)
+            return null;
         String username = FileIO.read(".username", activity);
         String password = FileIO.read(".password", activity);
         ClientAmbassador ambassador = client.getAmbassador(socket, username, password, "manager");
@@ -73,6 +75,9 @@ public class ApplicationListTask extends AsyncTask<Void, Void, ArrayList<Applica
             e.printStackTrace();
             return null;
         }
-        return socket;
+        if(socket.isConnected())
+            return socket;
+        else
+            return null;
     }
 }
