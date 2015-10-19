@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.spinalcraft.manager.client.Application;
 import com.spinalcraft.manager.client.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -41,7 +42,6 @@ public class ApplicationListAdapter extends ArrayAdapter<Application> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        System.out.println("TEST");
         if(convertView == null){
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_application_list, parent, false);
@@ -52,7 +52,7 @@ public class ApplicationListAdapter extends ArrayAdapter<Application> {
         username.setText(application.username);
 
         TextView date = (TextView)convertView.findViewById(R.id.date);
-        date.setText(application.timestamp.toString());
+        date.setText(new SimpleDateFormat("EEE, dd MMM yyyy hh:mm a z").format(application.timestamp * 1000L));
 
         TextView country = (TextView)convertView.findViewById(R.id.country);
         country.setText(application.country);

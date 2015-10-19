@@ -17,6 +17,7 @@ import com.spinalcraft.manager.client.task.ApplicationListTask;
 import com.spinalcraft.manager.client.util.Command;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ApplicationListActivity extends BaseActivity implements OnRefreshListener{
     private SwipeRefreshLayout swipeLayout;
@@ -90,7 +91,7 @@ public class ApplicationListActivity extends BaseActivity implements OnRefreshLi
                     shortToast("Failed to retrieve applications!");
                     return;
                 }
-
+                Collections.sort(applications, Collections.reverseOrder());
                 updateAdapter(applications);
             }
         }).execute();
