@@ -23,6 +23,11 @@
         <activity
             android:name="com.spinalcraft.manager.client.activity.ApplicationListActivity"
             android:theme="@style/ActionBarTheme"
+            android:label="Server Applications">
+        </activity>
+        <activity
+            android:name="com.spinalcraft.manager.client.activity.ApplicationActivity"
+            android:theme="@style/ActionBarTheme"
             android:label="">
         </activity>
         <activity android:name="com.spinalcraft.manager.client.activity.LoginActivity">

@@ -13,9 +13,6 @@ import com.spinalcraft.manager.client.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-/**
- * Created by Parker on 10/18/2015.
- */
 public class ApplicationListAdapter extends ArrayAdapter<Application> {
     private ArrayList<Application> applications;
 
@@ -56,6 +53,9 @@ public class ApplicationListAdapter extends ArrayAdapter<Application> {
 
         TextView country = (TextView)convertView.findViewById(R.id.country);
         country.setText(application.country);
+
+        TextView comment = (TextView)convertView.findViewById(R.id.comment);
+        comment.setText(application.comment);
 
         return convertView;
     }

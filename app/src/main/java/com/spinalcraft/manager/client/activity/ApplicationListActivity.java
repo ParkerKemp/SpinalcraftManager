@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.spinalcraft.manager.client.Application;
+import com.spinalcraft.manager.client.ApplicationListClickListener;
 import com.spinalcraft.manager.client.R;
 import com.spinalcraft.manager.client.TabSelectListener;
 import com.spinalcraft.manager.client.adapter.ApplicationListAdapter;
@@ -47,6 +48,7 @@ public class ApplicationListActivity extends BaseActivity implements OnRefreshLi
 
         ListView listView = (ListView)findViewById(R.id.applicationListView);
         listView.setAdapter(new ApplicationListAdapter(this, R.layout.item_application_list, new ArrayList<Application>()));
+        listView.setOnItemClickListener(new ApplicationListClickListener(this));
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
@@ -86,7 +88,7 @@ public class ApplicationListActivity extends BaseActivity implements OnRefreshLi
             @Override
             public void execute(Object... data) {
                 swipeLayout.setRefreshing(false);
-                ArrayList<Application> applications = (ArrayList)data[0];
+                ArrayList<Application> applications = (ArrayList<Application>)data[0];
                 if(applications == null) {
                     shortToast("Failed to retrieve applications!");
                     return;
