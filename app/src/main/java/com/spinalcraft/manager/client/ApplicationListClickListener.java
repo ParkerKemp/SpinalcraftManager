@@ -22,6 +22,7 @@ public class ApplicationListClickListener implements OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(activity, ApplicationActivity.class);
+        intent.putExtra("application", new Application());
         activity.startActivity(intent);
     }
 }

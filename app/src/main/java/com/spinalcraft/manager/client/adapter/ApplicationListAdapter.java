@@ -49,7 +49,7 @@ public class ApplicationListAdapter extends ArrayAdapter<Application> {
         username.setText(application.username);
 
         TextView date = (TextView)convertView.findViewById(R.id.date);
-        date.setText(new SimpleDateFormat("EEE, dd MMM yyyy hh:mm a z").format(application.timestamp * 1000L));
+        date.setText(new SimpleDateFormat("EEE, dd MMM yyyy hh:mm a").format(application.timestamp * 1000L));
 
         TextView country = (TextView)convertView.findViewById(R.id.country);
         country.setText(application.country);

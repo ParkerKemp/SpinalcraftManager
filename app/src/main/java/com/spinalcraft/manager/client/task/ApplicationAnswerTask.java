@@ -1,6 +1,5 @@
 package com.spinalcraft.manager.client.task;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
@@ -9,6 +8,7 @@ import com.spinalcraft.berberos.client.ClientAmbassador;
 import com.spinalcraft.easycrypt.messenger.MessageReceiver;
 import com.spinalcraft.easycrypt.messenger.MessageSender;
 import com.spinalcraft.manager.client.Application;
+import com.spinalcraft.manager.client.activity.ApplicationActivity;
 import com.spinalcraft.manager.client.util.AndroidClient;
 import com.spinalcraft.manager.client.util.Command;
 import com.spinalcraft.manager.client.util.Crypt;
@@ -21,22 +21,23 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
- * Created by Parker on 10/17/2015.
+ * Created by Parker on 10/20/2015.
  */
-public class ApplicationListTask extends AsyncTask<Void, Void, ArrayList<Application>> {
-
-    private Activity activity;
-    private String filter;
+public class ApplicationAnswerTask extends AsyncTask<Void, Void, Application> {
+    private String uuid;
+    private boolean accept;
+    private ApplicationActivity activity;
     private Command command;
 
-    public ApplicationListTask(Activity activity, String filter, Command command){
+    public ApplicationAnswerTask(ApplicationActivity activity, Command command, String uuid, boolean accept){
+        this.uuid = uuid;
+        this.accept = accept;
         this.activity = activity;
-        this.filter = filter;
         this.command = command;
     }
 
     @Override
-    protected ArrayList<Application> doInBackground(Void... params) {
+    protected Application doInBackground(Void... params) {
         AndroidClient client = new AndroidClient(Crypt.getInstance(), activity);
         Socket socket = connectToServer();
         if(socket == null)
@@ -48,25 +49,25 @@ public class ApplicationListTask extends AsyncTask<Void, Void, ArrayList<Applica
             return null;
 
         MessageSender sender = ambassador.getSender();
-        sender.addHeader("intent", "applicationList");
-        sender.addItem("filter", filter);
+        sender.addHeader("intent", "applicationAnswer");
+        sender.addItem("uuid", uuid);
+        sender.addItem("accept", String.valueOf(accept));
         ambassador.sendMessage(sender);
         MessageReceiver receiver = ambassador.receiveMessage();
         if(receiver == null)
             return null;
-        if(receiver.getHeader("status").equals("good")){
-            String json = receiver.getItem("applications");
-            Type type = new TypeToken<ArrayList<Application>>(){}.getType();
-            ArrayList<Application> applications = new Gson().fromJson(json, type);
-            return applications;
-        }
 
-        return null;
+        if(!receiver.getHeader("status").equals("good"))
+            return null;
+
+        String json = receiver.getItem("application");
+        Type type = new TypeToken<Application>(){}.getType();
+        return new Gson().fromJson(json, type);
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Application> applications){
-        command.execute(applications);
+    protected void onPostExecute(Application application){
+        command.execute(application);
     }
 
     private Socket connectToServer(){
