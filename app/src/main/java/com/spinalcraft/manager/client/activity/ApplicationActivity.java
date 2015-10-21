@@ -118,7 +118,7 @@ public class ApplicationActivity extends BaseActivity {
 
 
         skin = (ImageView)findViewById(R.id.avatar);
-        getSkin(application.username);
+        getSkin(application.uuid);
     }
 
     private void initButtons(String uuid){
@@ -133,7 +133,7 @@ public class ApplicationActivity extends BaseActivity {
         decline.setOnClickListener(new ApplicationAnswerClickListener(this, uuid, false));
     }
 
-    private void getSkin(final String username){
+    private void getSkin(String uuid){
         new SkinTask(new Command(){
 
             @Override
@@ -146,6 +146,6 @@ public class ApplicationActivity extends BaseActivity {
                 drawable.setFilterBitmap(false);
                 skin.setImageDrawable(drawable);
             }
-        }).execute(username);
+        }, uuid).execute();
     }
 }
