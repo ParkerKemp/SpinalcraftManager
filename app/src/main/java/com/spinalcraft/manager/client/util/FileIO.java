@@ -15,7 +15,6 @@ import java.io.UnsupportedEncodingException;
  */
 public class FileIO {
     public static void write(String filename, String str, Application application){
-        System.out.println("Writing " + filename);
         try {
             byte[] bytes = str.getBytes("UTF-8");
             FileOutputStream outputStream = application.openFileOutput(filename, Context.MODE_PRIVATE);
@@ -26,7 +25,6 @@ public class FileIO {
     }
 
     public static void delete(String filename, Application application){
-        System.out.println("Deleting " + filename);
         application.deleteFile(filename);
     }
 
@@ -40,7 +38,6 @@ public class FileIO {
     }
 
     public static String read(String filename, Application application){
-        System.out.println("Reading " + filename);
         byte[] buffer = new byte[1024];
         try {
             FileInputStream inputStream = application.openFileInput(filename);

@@ -29,7 +29,6 @@ public class LoginTask extends AsyncTask<Void, Void, ErrorCode> {
 
     @Override
     protected ErrorCode doInBackground(Void... params) {
-        System.out.println("Authenticating");
         AndroidClient client = new AndroidClient(Crypt.getInstance(), activity);
 
         return client.testCredentials(username, password);

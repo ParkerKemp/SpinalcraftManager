@@ -28,7 +28,6 @@ public class ApplicationListAdapter extends ArrayAdapter<Application> {
 
     @Override
     public int getCount(){
-        System.out.println("Got count: " + applications.size());
         return applications.size();
     }
 

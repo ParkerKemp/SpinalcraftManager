@@ -15,7 +15,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        Messenger.shouldShowDebug = true;
+//        Messenger.shouldShowDebug = true;
         setTitle("");
     }
     public void shortToast(String text){

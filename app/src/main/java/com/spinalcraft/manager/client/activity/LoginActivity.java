@@ -82,19 +82,19 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private void cachedLogin(){
-        cachedUsername = FileIO.read(".username", getApplication());
-        cachedPassword = FileIO.read(".password", getApplication());
-
-        if(cachedUsername != null) {
-            usernameEdit.setText(cachedUsername);
-            passwordEdit.requestFocus();
-            if (cachedPassword != null) {
-                passwordEdit.setText(cachedPassword);
-                attemptLogin(cachedUsername, cachedPassword);
-            }
-        }
-    }
+//    private void cachedLogin(){
+//        cachedUsername = FileIO.read(".username", getApplication());
+//        cachedPassword = FileIO.read(".password", getApplication());
+//
+//        if(cachedUsername != null) {
+//            usernameEdit.setText(cachedUsername);
+//            passwordEdit.requestFocus();
+//            if (cachedPassword != null) {
+//                passwordEdit.setText(cachedPassword);
+//                attemptLogin(cachedUsername, cachedPassword);
+//            }
+//        }
+//    }
 
     private void attemptLogin(String username, String password){
         progressLayout.setVisibility(View.VISIBLE);
