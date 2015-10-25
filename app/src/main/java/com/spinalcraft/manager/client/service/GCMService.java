@@ -1,5 +1,6 @@
 package com.spinalcraft.manager.client.service;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -41,13 +42,10 @@ public class GCMService extends GcmListenerService {
     private void sendNotification(Application application) {
         Intent intent = new Intent(this, ApplicationActivity.class);
         intent.putExtra("application", application);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this)
                 .addNextIntentWithParentStack(intent);
 
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-//                PendingIntent.FLAG_ONE_SHOT);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -57,6 +55,8 @@ public class GCMService extends GcmListenerService {
                 .setContentText(application.username)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setLights(0xff00ff00, 400, 1200)
+                .setPriority(Notification.PRIORITY_MAX)
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
