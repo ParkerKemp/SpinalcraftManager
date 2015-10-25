@@ -1,5 +1,6 @@
 package com.spinalcraft.manager.client.task;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.spinalcraft.manager.client.util.Command;
 import com.spinalcraft.manager.client.util.Crypt;
+import com.spinalcraft.manager.client.util.FileIO;
 
 import org.json.JSONArray;
 
@@ -29,14 +31,16 @@ import java.util.HashMap;
  */
 public class SkinTask extends AsyncTask<Void, Void, Bitmap> {
 
-    private static HashMap<String, String> urlCache = new HashMap<String, String>();
+    private Activity activity;
     private Command command;
     private String uuid;
 
-    public SkinTask(Command command, String uuid){
+    public SkinTask(Activity activity, Command command, String uuid){
+        this.activity = activity;
         this.command = command;
         this.uuid = uuid;
     }
+
     @Override
     protected Bitmap doInBackground(Void... params) {
         String url = getSkinUrl();
@@ -59,7 +63,7 @@ public class SkinTask extends AsyncTask<Void, Void, Bitmap> {
     }
 
     private String getSkinUrl(){
-        String skinUrl = urlCache.get(uuid);
+        String skinUrl = FileIO.read(".skin_" + uuid, activity.getApplication());
         if(skinUrl != null)
             return skinUrl;
         String url = " https://sessionserver.mojang.com/session/minecraft/profile/" + uuid;
@@ -78,7 +82,7 @@ public class SkinTask extends AsyncTask<Void, Void, Bitmap> {
             obj = obj.get("textures").getAsJsonObject();
             obj = obj.get("SKIN").getAsJsonObject();
             skinUrl = obj.get("url").getAsString();
-            urlCache.put(uuid, skinUrl);
+            FileIO.write(".skin_" + uuid, skinUrl, activity.getApplication());
             return skinUrl;
         } catch (IOException e) {
             e.printStackTrace();

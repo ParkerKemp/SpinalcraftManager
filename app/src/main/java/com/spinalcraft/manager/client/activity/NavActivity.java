@@ -18,14 +18,12 @@ import com.spinalcraft.manager.client.util.FileIO;
 /**
  * Created by Parker on 10/18/2015.
  */
-public class NavActivity extends BaseActivity {
+public class NavActivity extends AuthenticatedActivity {
     protected ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -88,10 +86,5 @@ public class NavActivity extends BaseActivity {
     public void openAppList(){
         Intent intent = new Intent(this, ApplicationListActivity.class);
         startActivity(intent);
-    }
-
-    public void logout(){
-        FileIO.delete(".password", this);
-        finish();
     }
 }

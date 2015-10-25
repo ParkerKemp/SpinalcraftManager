@@ -42,8 +42,8 @@ public class ApplicationAnswerTask extends AsyncTask<Void, Void, Application> {
         Socket socket = connectToServer();
         if(socket == null)
             return null;
-        String username = FileIO.read(".username", activity);
-        String password = FileIO.read(".password", activity);
+        String username = FileIO.read(".username", activity.getApplication());
+        String password = FileIO.read(".password", activity.getApplication());
         ClientAmbassador ambassador = client.getAmbassador(socket, username, password, "manager");
         if(ambassador == null)
             return null;

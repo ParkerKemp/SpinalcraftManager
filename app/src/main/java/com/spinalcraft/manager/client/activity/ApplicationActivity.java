@@ -34,7 +34,7 @@ import java.util.Date;
 /**
  * Created by Parker on 10/18/2015.
  */
-public class ApplicationActivity extends BaseActivity {
+public class ApplicationActivity extends AuthenticatedActivity {
 
     private ImageView skin;
 
@@ -64,7 +64,6 @@ public class ApplicationActivity extends BaseActivity {
     }
 
     public void loadView(Application application){
-        System.out.println(application.username);
         TextView username = (TextView)findViewById(R.id.username);
         username.setText(application.username);
 
@@ -97,11 +96,12 @@ public class ApplicationActivity extends BaseActivity {
 
         TextView statusDetails = (TextView)findViewById(R.id.statusDetails);
 
-        if(application.status == 0){
+        initButtons(application);
+
+        if(application.status == 0) {
             statusDetails.setVisibility(View.GONE);
-            initButtons(application.uuid);
         }
-        else if(application.status == 1){
+        else if(application.status == 1) {
             statusDetails.setText("Accepted by " + application.staffActor + " on " + new SimpleDateFormat("EEE, dd MMM yyyy hh:mm a").format(application.actionTimestamp * 1000L));
             statusDetails.setVisibility(View.VISIBLE);
         }
@@ -116,25 +116,30 @@ public class ApplicationActivity extends BaseActivity {
         TextView email = (TextView)findViewById(R.id.email);
         email.setText(application.email);
 
-
         skin = (ImageView)findViewById(R.id.avatar);
         getSkin(application.uuid);
     }
 
-    private void initButtons(String uuid){
+    private void initButtons(Application application){
         LinearLayout buttonBar = (LinearLayout)findViewById(R.id.buttonBar);
+
+        if(application.status != 0){
+            buttonBar.setVisibility(View.GONE);
+            return;
+        }
+
         buttonBar.setVisibility(View.VISIBLE);
 
         Button accept = (Button)findViewById(R.id.accept);
         Button decline = (Button)findViewById(R.id.decline);
 
-        accept.setOnClickListener(new ApplicationAnswerClickListener(this, uuid, true));
+        accept.setOnClickListener(new ApplicationAnswerClickListener(this, application.uuid, true));
 
-        decline.setOnClickListener(new ApplicationAnswerClickListener(this, uuid, false));
+        decline.setOnClickListener(new ApplicationAnswerClickListener(this, application.uuid, false));
     }
 
     private void getSkin(String uuid){
-        new SkinTask(new Command(){
+        new SkinTask(this, new Command(){
 
             @Override
             public void execute(Object... data) {

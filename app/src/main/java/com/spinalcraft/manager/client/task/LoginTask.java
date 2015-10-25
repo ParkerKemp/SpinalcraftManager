@@ -29,46 +29,36 @@ public class LoginTask extends AsyncTask<Void, Void, ErrorCode> {
 
     @Override
     protected ErrorCode doInBackground(Void... params) {
+        System.out.println("Authenticating");
         AndroidClient client = new AndroidClient(Crypt.getInstance(), activity);
 
-        ErrorCode code = client.testCredentials(username, password);
-        if(code == ErrorCode.NONE){
-            FileIO.write(".username", username, activity);
-            FileIO.write(".password", password, activity);
-        }
-        return code;
+        return client.testCredentials(username, password);
     }
 
     @Override
     protected void onPostExecute(ErrorCode code){
         handleCode(code);
+
+        if(code == ErrorCode.NONE){
+            FileIO.write(".username", username, activity.getApplication());
+            FileIO.write(".password", password, activity.getApplication());
+        }
+        else if(code == ErrorCode.AUTHENTICATION){
+            FileIO.delete(".password", activity.getApplication());
+        }
+
         command.execute(activity, code);
     }
 
     private void invalidResponse(){
-//        new AlertDialog.Builder(activity)
-//                .setTitle("Invalid response!")
-//                .setMessage("Received an invalid response from authentication server!")
-//                .setPositiveButton("OK", null)
-//                .show();
         activity.shortToast("Received invalid response from authentication server.");
     }
 
     private void connectionFailed(){
-//        new AlertDialog.Builder(activity)
-//                .setTitle("Connection failed!")
-//                .setMessage("Could not connect to authentication server!")
-//                .setPositiveButton("OK", null)
-//                .show();
         activity.shortToast("Could not connect to authentication server.");
     }
 
     private void accessDenied(){
-//        new AlertDialog.Builder(activity)
-//                .setTitle("Authentication failed!")
-//                .setMessage("Username or password is invalid. Please try again.")
-//                .setPositiveButton("OK", null)
-//                .show();
         activity.shortToast("Invalid username or password.");
     }
 

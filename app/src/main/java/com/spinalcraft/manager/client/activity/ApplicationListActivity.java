@@ -14,7 +14,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.spinalcraft.manager.client.Application;
-import com.spinalcraft.manager.client.ApplicationListClickListener;
 import com.spinalcraft.manager.client.R;
 import com.spinalcraft.manager.client.TabSelectListener;
 import com.spinalcraft.manager.client.adapter.ApplicationListAdapter;
@@ -24,10 +23,14 @@ import com.spinalcraft.manager.client.util.Command;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ApplicationListActivity extends BaseActivity implements OnRefreshListener, OnItemClickListener {
+public class ApplicationListActivity extends AuthenticatedActivity implements OnRefreshListener, OnItemClickListener {
     private SwipeRefreshLayout swipeLayout;
     private String filter;
     private ApplicationListAdapter adapter;
+
+    private TabLayout tabLayout;
+
+    private int defaultTab = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -41,15 +44,13 @@ public class ApplicationListActivity extends BaseActivity implements OnRefreshLi
         getTheme().resolveAttribute(android.R.attr.actionBarSize, typed_value, true);
         swipeLayout.setProgressViewOffset(false, 0, getResources().getDimensionPixelSize(typed_value.resourceId));
 
-        swipeLayout.setRefreshing(true);
-        TabLayout tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+//        swipeLayout.setRefreshing(true);
+        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.addTab(tabLayout.newTab().setText("All"));
         tabLayout.addTab(tabLayout.newTab().setText("Pending"));
         tabLayout.addTab(tabLayout.newTab().setText("Accepted"));
         tabLayout.addTab(tabLayout.newTab().setText("Declined"));
-        tabLayout.setOnTabSelectedListener(new TabSelectListener(this));
-        tabLayout.getTabAt(1).select();
 
         adapter = new ApplicationListAdapter(this, R.layout.item_application_list, new ArrayList<Application>());
         ListView listView = (ListView)findViewById(R.id.applicationListView);
@@ -59,8 +60,27 @@ public class ApplicationListActivity extends BaseActivity implements OnRefreshLi
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
 
-//        getApplications();
+    @Override
+    protected void onAuthenticate(){
+        TabLayout tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        tabLayout.setOnTabSelectedListener(new TabSelectListener(this));
+
+//        if(tabLayout.getSelectedTabPosition() == -1)
+        tabLayout.getTabAt(defaultTab).select();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        outState.putInt("tab", tabLayout.getSelectedTabPosition());
+        super.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState){
+        defaultTab = savedInstanceState.getInt("tab");
     }
 
     @Override

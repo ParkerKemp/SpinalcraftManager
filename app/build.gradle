@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.example.parker.spinalcraftmanager"
+        applicationId "com.spinalcraft.manager"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
@@ -39,4 +40,5 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.android.support:support-v4:23.0.1'
     compile 'com.android.support:design:23.0.1'
+    compile 'com.google.android.gms:play-services:8.1.0'
 }

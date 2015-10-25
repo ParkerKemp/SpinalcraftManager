@@ -3,6 +3,9 @@
     package="com.spinalcraft.manager.client" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="com.google.android.cd2m.permission.RECEIVE"/>
+    <uses-permission android:name="com.spinalcraft.manager.permission.C2D_MESSAGE"/>
 
     <application
         android:allowBackup="true"
@@ -10,8 +13,12 @@
         android:label="@string/app_name"
         android:theme="@style/ToolbarTheme">
         <activity
-            android:name="com.spinalcraft.manager.client.activity.MainActivity"
-            android:label="" >
+            android:name=".activity.MainActivity"
+            android:label="Spinalcraft Manager" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.LoginActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -19,24 +26,57 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="spinal" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.spinalcraft.manager.client.activity.ApplicationListActivity"
-            android:theme="@style/ActionBarTheme"
-            android:label="Server Applications">
-        </activity>
-        <activity
-            android:name="com.spinalcraft.manager.client.activity.ApplicationActivity"
-            android:theme="@style/ActionBarTheme"
-            android:label="">
-        </activity>
-        <activity android:name="com.spinalcraft.manager.client.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.ApplicationListActivity"
+            android:theme="@style/ActionBarTheme"
+            android:label="Server Applications"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ApplicationActivity"
+            android:theme="@style/ActionBarTheme"
+            android:label=""
+            android:parentActivityName=".activity.ApplicationListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ApplicationListActivity" />
+        </activity>
+        <activity android:name=".activity.LoginActivity">
+        </activity>
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.spinalcraft.manager" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".service.GCMService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service android:name=".service.InstanceIDService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".service.RegistrationIntentService"
+            android:exported="false">
+        </service>
     </application>
 
 </manifest>

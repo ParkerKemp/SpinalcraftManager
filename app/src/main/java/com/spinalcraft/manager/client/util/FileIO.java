@@ -1,6 +1,7 @@
 package com.spinalcraft.manager.client.util;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 
 import java.io.FileInputStream;
@@ -13,38 +14,41 @@ import java.io.UnsupportedEncodingException;
  * Created by Parker on 10/11/2015.
  */
 public class FileIO {
-    public static void write(String filename, String str, Activity activity){
+    public static void write(String filename, String str, Application application){
+        System.out.println("Writing " + filename);
         try {
             byte[] bytes = str.getBytes("UTF-8");
-            FileOutputStream outputStream = activity.getApplication().openFileOutput(filename, Context.MODE_PRIVATE);
+            FileOutputStream outputStream = application.openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(bytes, 0, bytes.length);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void delete(String filename, Activity activity){
-        activity.getApplication().deleteFile(filename);
+    public static void delete(String filename, Application application){
+        System.out.println("Deleting " + filename);
+        application.deleteFile(filename);
     }
 
-    public static boolean exists(String filename, Activity activity){
+    public static boolean exists(String filename, Application application){
         try {
-            activity.getApplication().openFileInput(filename);
+            application.openFileInput(filename);
             return true;
         } catch (FileNotFoundException e) {
             return false;
         }
     }
 
-    public static String read(String filename, Activity activity){
+    public static String read(String filename, Application application){
+        System.out.println("Reading " + filename);
         byte[] buffer = new byte[1024];
         try {
-            FileInputStream inputStream = activity.getApplication().openFileInput(filename);
+            FileInputStream inputStream = application.openFileInput(filename);
 
             inputStream.read(buffer, 0, 1024);
             return nullTerminate(new String(buffer));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("File does not exist: " + filename);
         }
         return null;
     }

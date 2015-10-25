@@ -36,8 +36,6 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Messenger.shouldShowDebug = true;
-
         progressLayout = (LinearLayout)findViewById(R.id.progressLayout);
         progressLayout.setVisibility(View.GONE);
 //
@@ -64,12 +62,29 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        cachedLogin();
+        String username = getIntent().getStringExtra("username");
+        String password = getIntent().getStringExtra("password");
+
+        populateFields(username, password);
+    }
+
+    @Override
+    public void onBackPressed(){
+    }
+
+    private void populateFields(String username, String password){
+        if(username != null) {
+            usernameEdit.setText(username);
+            passwordEdit.requestFocus();
+            if (password != null) {
+                passwordEdit.setText(password);
+            }
+        }
     }
 
     private void cachedLogin(){
-        cachedUsername = FileIO.read(".username", this);
-        cachedPassword = FileIO.read(".password", this);
+        cachedUsername = FileIO.read(".username", getApplication());
+        cachedPassword = FileIO.read(".password", getApplication());
 
         if(cachedUsername != null) {
             usernameEdit.setText(cachedUsername);
@@ -82,17 +97,10 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void attemptLogin(String username, String password){
-//        spinner.setVisibility(View.VISIBLE);
         progressLayout.setVisibility(View.VISIBLE);
-//        ProgressDialog progress = new ProgressDialog(this);
-//        progress.setTitle("Loading");
-//        progress.setMessage("Wait while loading...");
-//        progress.setCancelable(false);
-//        progress.show();
         new LoginTask(username, password, this, new Command() {
             @Override
             public void execute(Object... data) {
-//                spinner.setVisibility(View.GONE);
                 progressLayout.setVisibility(View.GONE);
                 Activity activity = (Activity)data[0];
                 BerberosError.ErrorCode code = (ErrorCode)data[1];
@@ -105,8 +113,10 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void grantAccess(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivityForResult(intent, 0);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivityForResult(intent, 0);
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override

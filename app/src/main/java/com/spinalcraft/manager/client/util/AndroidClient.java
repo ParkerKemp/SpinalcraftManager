@@ -23,30 +23,30 @@ public class AndroidClient extends BerberosClient {
 
     @Override
     protected void cacheSessionKey(String s, String s1) {
-        FileIO.write(".session_" + s, s1, activity);
+        FileIO.write(".session_" + s, s1, activity.getApplication());
     }
 
     @Override
     protected String retrieveSessionKey(String s) {
         String filename = ".session_" + s;
-        if(!FileIO.exists(filename, activity))
+        if(!FileIO.exists(filename, activity.getApplication()))
             return null;
 
-        return FileIO.read(filename, activity);
+        return FileIO.read(filename, activity.getApplication());
     }
 
     @Override
     protected void cacheTicket(String s, String s1) {
-        FileIO.write(".ticket_" + s, s1, activity);
+        FileIO.write(".ticket_" + s, s1, activity.getApplication());
     }
 
     @Override
     protected String retrieveTicket(String s) {
         String filename = ".ticket_" + s;
-        if(!FileIO.exists(filename, activity))
+        if(!FileIO.exists(filename, activity.getApplication()))
             return null;
 
-        return FileIO.read(filename, activity);
+        return FileIO.read(filename, activity.getApplication());
     }
 
     @Override

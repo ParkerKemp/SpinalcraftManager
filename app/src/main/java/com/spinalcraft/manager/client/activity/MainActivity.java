@@ -15,10 +15,10 @@ import android.widget.ListView;
 
 import com.spinalcraft.manager.client.DrawerClickListener;
 import com.spinalcraft.manager.client.R;
+import com.spinalcraft.manager.client.service.RegistrationIntentService;
 import com.spinalcraft.manager.client.util.FileIO;
 
 public class MainActivity extends NavActivity {
-    public static final int LoginRequest = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,12 @@ public class MainActivity extends NavActivity {
 
 
 //        (new Thread(new Connector(this))).start();
+    }
+
+    @Override
+    protected void onAuthenticate(){
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
     }
 
     @Override
