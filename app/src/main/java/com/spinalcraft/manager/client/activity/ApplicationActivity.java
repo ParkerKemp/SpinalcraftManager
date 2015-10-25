@@ -58,9 +58,14 @@ public class ApplicationActivity extends AuthenticatedActivity {
         switch(item.getItemId()){
             case android.R.id.home:
                 onBackPressed();
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        finish();
     }
 
     public void loadView(Application application){
