@@ -66,7 +66,7 @@ public class SkinTask extends AsyncTask<Void, Void, Bitmap> {
         String skinUrl = FileIO.read(".skin_" + uuid, activity.getApplication());
         if(skinUrl != null)
             return skinUrl;
-        String url = " https://sessionserver.mojang.com/session/minecraft/profile/" + uuid;
+        String url = "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid;
         try {
             HttpURLConnection connection = createConnection(url);
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -84,7 +84,7 @@ public class SkinTask extends AsyncTask<Void, Void, Bitmap> {
             skinUrl = obj.get("url").getAsString();
             FileIO.write(".skin_" + uuid, skinUrl, activity.getApplication());
             return skinUrl;
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
         return null;
