@@ -30,13 +30,14 @@ public class ApplicationListActivity extends AuthenticatedActivity implements On
 
     private TabLayout tabLayout;
 
-    private int defaultTab = 1;
+    public int selectedTab = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_application_list);
 
+        System.out.println("SELECTED: " + selectedTab);
         swipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipeLayout);
         swipeLayout.setOnRefreshListener(this);
 
@@ -67,20 +68,18 @@ public class ApplicationListActivity extends AuthenticatedActivity implements On
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabLayout);
         tabLayout.setOnTabSelectedListener(new TabSelectListener(this));
 
-//        if(tabLayout.getSelectedTabPosition() == -1)
-        tabLayout.getTabAt(defaultTab).select();
+        tabLayout.getTabAt(selectedTab).select();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState){
         outState.putInt("tab", tabLayout.getSelectedTabPosition());
         super.onSaveInstanceState(outState);
-        super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState){
-        defaultTab = savedInstanceState.getInt("tab");
+        selectedTab = savedInstanceState.getInt("tab");
     }
 
     @Override
@@ -101,8 +100,6 @@ public class ApplicationListActivity extends AuthenticatedActivity implements On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, ApplicationActivity.class);
-        Application application = adapter.getItem(position);
-        System.out.println("Sending username: " + application.username);
         intent.putExtra("application", adapter.getItem(position));
         startActivity(intent);
     }

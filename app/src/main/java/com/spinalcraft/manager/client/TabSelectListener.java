@@ -21,6 +21,7 @@ public class TabSelectListener implements TabLayout.OnTabSelectedListener{
         String filter = tab.getText().toString().toLowerCase();
         activity.setFilter(filter);
         activity.updateListView();
+        activity.selectedTab = tab.getPosition();
     }
 
     @Override
