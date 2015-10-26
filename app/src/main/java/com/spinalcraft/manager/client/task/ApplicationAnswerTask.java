@@ -20,9 +20,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-/**
- * Created by Parker on 10/20/2015.
- */
 public class ApplicationAnswerTask extends AsyncTask<Void, Void, Application> {
     private String uuid;
     private boolean accept;
@@ -44,7 +41,7 @@ public class ApplicationAnswerTask extends AsyncTask<Void, Void, Application> {
             return null;
         String username = FileIO.read(".username", activity.getApplication());
         String password = FileIO.read(".password", activity.getApplication());
-        ClientAmbassador ambassador = client.getAmbassador(socket, username, password, "manager");
+        ClientAmbassador ambassador = client.getAmbassador(username, password, "manager");
         if(ambassador == null)
             return null;
 

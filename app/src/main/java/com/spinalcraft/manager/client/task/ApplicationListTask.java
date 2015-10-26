@@ -20,9 +20,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-/**
- * Created by Parker on 10/17/2015.
- */
 public class ApplicationListTask extends AsyncTask<Void, Void, ArrayList<Application>> {
 
     private Activity activity;
@@ -43,7 +40,7 @@ public class ApplicationListTask extends AsyncTask<Void, Void, ArrayList<Applica
             return null;
         String username = FileIO.read(".username", activity.getApplication());
         String password = FileIO.read(".password", activity.getApplication());
-        ClientAmbassador ambassador = client.getAmbassador(socket, username, password, "manager");
+        ClientAmbassador ambassador = client.getAmbassador(username, password, "manager");
         if(ambassador == null)
             return null;
 
@@ -57,8 +54,7 @@ public class ApplicationListTask extends AsyncTask<Void, Void, ArrayList<Applica
         if(receiver.getHeader("status").equals("good")){
             String json = receiver.getItem("applications");
             Type type = new TypeToken<ArrayList<Application>>(){}.getType();
-            ArrayList<Application> applications = new Gson().fromJson(json, type);
-            return applications;
+            return new Gson().fromJson(json, type);
         }
 
         return null;
