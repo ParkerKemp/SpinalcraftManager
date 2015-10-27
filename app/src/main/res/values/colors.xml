@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="brightGreen" type="color">#90ffad</item>
+    <item name="darkYellow" type="color">#ccc200</item>
+    <item name="darkRed" type="color">#9f0000</item>
+    <item name="darkGreen" type="color">#0d9a00</item>
 </resources>

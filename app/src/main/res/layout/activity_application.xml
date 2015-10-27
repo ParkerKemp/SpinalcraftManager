@@ -144,7 +144,8 @@
         android:id="@+id/buttonBar"
         style="@android:style/ButtonBar"
         android:layout_alignParentBottom="true"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:padding="0dp">
 
         <Button
             android:layout_width="0dp"
@@ -153,7 +154,9 @@
             android:text="ACCEPT"
             android:textColor="@color/brightGreen"
             style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/accept" />
+            android:id="@+id/accept"
+            android:padding="0dp"
+            android:layout_margin="0dp"/>
 
         <Button
             android:layout_width="0dp"

@@ -82,19 +82,19 @@ public class ApplicationActivity extends AuthenticatedActivity {
 
         age.setText("Approx. age: " + (Calendar.getInstance().get(Calendar.YEAR) - application.year));
 
-        String appStatus = "";
+        TextView status = (TextView)findViewById(R.id.status);
         switch(application.status){
             case 0:
-                appStatus = "pending";
+                status.setTextColor(getResources().getColor(R.color.darkYellow));
+                status.setText("Application status: pending");
                 break;
             case 1:
             case 2:
-                appStatus = "completed";
+                status.setTextColor(getResources().getColor(R.color.darkGreen));
+                status.setText("Application status: complete");
                 break;
         }
 
-        TextView status = (TextView)findViewById(R.id.status);
-        status.setText("Application status: " + appStatus);
 
         TextView submissionDate = (TextView)findViewById(R.id.submissionDate);
         submissionDate.setText("Submitted on " + new SimpleDateFormat("EEE, dd MMM yyyy hh:mm a").format(application.timestamp * 1000L));
@@ -107,10 +107,12 @@ public class ApplicationActivity extends AuthenticatedActivity {
             statusDetails.setVisibility(View.GONE);
         }
         else if(application.status == 1) {
+            statusDetails.setTextColor(getResources().getColor(R.color.darkGreen));
             statusDetails.setText("Accepted by " + application.staffActor + " on " + new SimpleDateFormat("EEE, dd MMM yyyy hh:mm a").format(application.actionTimestamp * 1000L));
             statusDetails.setVisibility(View.VISIBLE);
         }
         else{
+            statusDetails.setTextColor(getResources().getColor(R.color.darkRed));
             statusDetails.setText("Declined by " + application.staffActor + " on " + new SimpleDateFormat("EEE, dd MMM yyyy hh:mm a").format(application.actionTimestamp * 1000L));
             statusDetails.setVisibility(View.VISIBLE);
         }

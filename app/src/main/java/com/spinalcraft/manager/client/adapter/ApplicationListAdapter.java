@@ -56,6 +56,22 @@ public class ApplicationListAdapter extends ArrayAdapter<Application> {
         TextView comment = (TextView)convertView.findViewById(R.id.comment);
         comment.setText(application.comment);
 
+        TextView status = (TextView)convertView.findViewById(R.id.status);
+        switch(application.status){
+            case 0:
+                status.setTextColor(convertView.getResources().getColor(R.color.darkYellow));
+                status.setText("Pending");
+                break;
+            case 1:
+                status.setTextColor(convertView.getResources().getColor(R.color.darkGreen));
+                status.setText("Accepted");
+                break;
+            case 2:
+                status.setTextColor(convertView.getResources().getColor(R.color.darkRed));
+                status.setText("Declined");
+                break;
+        }
+
         return convertView;
     }
 }
